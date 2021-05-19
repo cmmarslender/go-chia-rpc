@@ -272,11 +272,14 @@ func (c *Client) NewRequest(method string, service ServiceType, rpcEndpoint Endp
 	case method == http.MethodPost || method == http.MethodPut:
 		reqHeaders.Set("Content-Type", "application/json")
 
-		if opt != nil {
-			body, err = json.Marshal(opt)
-			if err != nil {
-				return nil, err
-			}
+		// Always need at least an empty json object in the body
+		if opt == nil {
+			opt = []byte(`{}`)
+		}
+
+		body, err = json.Marshal(opt)
+		if err != nil {
+			return nil, err
 		}
 	case opt != nil:
 		q, err := query.Values(opt)
