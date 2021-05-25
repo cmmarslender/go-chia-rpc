@@ -19,7 +19,7 @@ all: fmt lint vet build
 
 .PHONY: build
 build: $(BIN) ; $(info $(M) building executable…) @ ## Build program binary
-	$Q CGO_ENABLED=1 $(GO) build \
+	$Q CGO_ENABLED=0 $(GO) build \
 		-tags release \
 		-o $(BIN)/$(notdir $(basename $(MODULE))) main.go
 # Tools
