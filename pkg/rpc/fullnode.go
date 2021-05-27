@@ -65,8 +65,12 @@ type BlockRecord struct {
 	//	Weight       uint64 `json:"weight"`      // @TODO this is supposed to be uint128
 }
 
-// Coin is a coin // @TODO
-type Coin struct{}
+// Coin is a coin
+type Coin struct {
+	Amount         uint64 `json:"amount"`
+	ParentCoinInfo string `json:"parent_coin_info"`
+	PuzzleHash     string `json:"puzzle_hash"`
+}
 
 // ClassgroupElement Classgroup Element
 type ClassgroupElement struct {
