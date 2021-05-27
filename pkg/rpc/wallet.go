@@ -170,3 +170,31 @@ func (s *WalletService) GetTransactions(opts *GetWalletTransactionsOptions) (*Ge
 
 	return r, resp, nil
 }
+
+// GetWalletTransactionOptions options for getting a single wallet transaction
+type GetWalletTransactionOptions struct {
+	CommonWalletOptions
+	TransactionID string `json:"transaction_id"`
+}
+
+// GetWalletTransactionsResponse response for get_wallet_transactions
+type GetWalletTransactionResponse struct {
+	Transaction   *types.Transaction `json:"transaction"`
+	TransactionID string             `json:"transaction_id"`
+}
+
+// GetTransaction returns a single transaction record
+func (s *WalletService) GetTransaction(opts *GetWalletTransactionOptions) (*GetWalletTransactionResponse, *http.Response, error) {
+	request, err := s.NewRequest("get_transaction", opts)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	r := &GetWalletTransactionResponse{}
+	resp, err := s.Do(request, r)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return r, resp, nil
+}

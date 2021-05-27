@@ -13,7 +13,7 @@ type Transaction struct {
 	Sent              uint32  `json:"sent"`
 	//SentTo            SentTo          `json:"sent_to"` // @TODO need to properly unserialize this
 	SpendBundle  *SpendBundle     `json:"spend_bundle"`
-	ToAddress    *Address         `json:""`
+	ToAddress    *Address         `json:"to_address"`
 	ToPuzzleHash *PuzzleHash      `json:"to_puzzle_hash"`
 	TradeID      string           `json:"trade_id"`
 	Type         *TransactionType `json:"type"`
