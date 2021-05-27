@@ -14,6 +14,11 @@ func (s *FullNodeService) NewRequest(rpcEndpoint Endpoint, opt interface{}) (*Re
 	return s.client.NewRequest(http.MethodPost, ServiceFullNode, rpcEndpoint, opt)
 }
 
+// Do is just a shortcut to the client's Do method
+func (s *FullNodeService) Do(req *Request, v interface{}) (*http.Response, error) {
+	return s.client.Do(req, v)
+}
+
 // GetBlockchainStateResponse is the blockchain state RPC response
 type GetBlockchainStateResponse struct {
 	Success         bool            `json:"success"`
@@ -84,7 +89,7 @@ func (s *FullNodeService) GetBlockchainState() (*GetBlockchainStateResponse, *ht
 	}
 
 	wbr := &GetBlockchainStateResponse{}
-	resp, err := s.client.Do(request, wbr)
+	resp, err := s.Do(request, wbr)
 	if err != nil {
 		return nil, resp, err
 	}

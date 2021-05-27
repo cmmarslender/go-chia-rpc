@@ -12,6 +12,11 @@ func (s *WalletService) NewRequest(rpcEndpoint Endpoint, opt interface{}) (*Requ
 	return s.client.NewRequest(http.MethodPost, ServiceWallet, rpcEndpoint, opt)
 }
 
+// Do is just a shortcut to the client's Do method
+func (s *WalletService) Do(req *Request, v interface{}) (*http.Response, error) {
+	return s.client.Do(req, v)
+}
+
 // CommonWalletOptions are common components to every wallet request
 type CommonWalletOptions struct {
 	WalletID uint64 `json:"wallet_id,omitempty"`
@@ -33,7 +38,7 @@ func (s *WalletService) GetSyncStatus() (*GetWalletSyncStatusResponse, *http.Res
 	}
 
 	wssr := &GetWalletSyncStatusResponse{}
-	resp, err := s.client.Do(request, wssr)
+	resp, err := s.Do(request, wssr)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -55,7 +60,7 @@ func (s *WalletService) GetHeightInfo() (*GetWalletHeightInfoResponse, *http.Res
 	}
 
 	r := &GetWalletHeightInfoResponse{}
-	resp, err := s.client.Do(request, r)
+	resp, err := s.Do(request, r)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -78,7 +83,7 @@ func (s *WalletService) GetNetworkInfo() (*GetWalletNetworkInfoResponse, *http.R
 	}
 
 	r := &GetWalletNetworkInfoResponse{}
-	resp, err := s.client.Do(request, r)
+	resp, err := s.Do(request, r)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -140,7 +145,7 @@ func (s *WalletService) GetWallets() (*GetWalletsResponse, *http.Response, error
 	}
 
 	r := &GetWalletsResponse{}
-	resp, err := s.client.Do(request, r)
+	resp, err := s.Do(request, r)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -179,7 +184,7 @@ func (s *WalletService) GetWalletBalance(opts *GetWalletBalanceOptions) (*GetWal
 	}
 
 	wbr := &GetWalletBalanceResponse{}
-	resp, err := s.client.Do(request, wbr)
+	resp, err := s.Do(request, wbr)
 	if err != nil {
 		return nil, resp, err
 	}
