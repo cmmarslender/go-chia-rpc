@@ -9,6 +9,11 @@ type FullNodeService struct {
 	client *Client
 }
 
+// NewRequest returns a new request specific to the wallet service
+func (s *FullNodeService) NewRequest(rpcEndpoint Endpoint, opt interface{}) (*Request, error) {
+	return s.client.NewRequest(http.MethodPost, ServiceFullNode, rpcEndpoint, opt)
+}
+
 // GetBlockchainStateResponse is the blockchain state RPC response
 type GetBlockchainStateResponse struct {
 	Success         bool            `json:"success"`
@@ -73,7 +78,7 @@ type Sync struct {
 
 // GetBlockchainState returns blockchain state
 func (s *FullNodeService) GetBlockchainState() (*GetBlockchainStateResponse, *http.Response, error) {
-	request, err := s.client.NewRequest(http.MethodPost, ServiceFullNode, "get_blockchain_state", nil)
+	request, err := s.NewRequest("get_blockchain_state", nil)
 	if err != nil {
 		return nil, nil, err
 	}
