@@ -7,6 +7,30 @@ type CommonWalletOptions struct {
 	WalletID uint64 `json:"wallet_id,omitempty"`
 }
 
+// GetWalletSyncStatusResponse Response for get_sync_status on wallet
+type GetWalletSyncStatusResponse struct {
+	GenesisInitialized bool `json:"genesis_initialized"`
+	Success            bool `json:"success"`
+	Synced             bool `json:"synced"`
+	Syncing            bool `json:"syncing"`
+}
+
+// GetWalletSyncStatus wallet rpc -> get_sync_status
+func (c *Client) GetWalletSyncStatus() (*GetWalletSyncStatusResponse, *http.Response, error) {
+	request, err := c.NewRequest(http.MethodPost, ServiceWallet, "get_sync_status", nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	wssr := &GetWalletSyncStatusResponse{}
+	resp, err := c.Do(request, wssr)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return wssr, resp, nil
+}
+
 // GetWalletBalanceOptions request options for get_wallet_balance
 type GetWalletBalanceOptions struct {
 	CommonWalletOptions
@@ -23,7 +47,7 @@ type WalletBalance struct {
 	ConfirmedWalletBalance   int64 `json:"confirmed_wallet_balance"` // @TODO uint128
 	MaxSendAmount            int64 `json:"max_send_amount"`
 	PendingChange            int64 `json:"pending_change"`
-	SpendableBalance         int64 `json:"spendable_balance"` // @TODO uint128
+	SpendableBalance         int64 `json:"spendable_balance"`          // @TODO uint128
 	UnconfirmedWalletBalance int64 `json:"unconfirmed_wallet_balance"` // @TODO uint128
 	UnspentCoinCount         int64 `json:"unspent_coin_count"`
 	PendingCoinRemovalCount  int64 `json:"pending_coin_removal_count"`
