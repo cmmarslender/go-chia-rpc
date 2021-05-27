@@ -81,6 +81,68 @@ func (s *WalletService) GetNetworkInfo() (*GetWalletNetworkInfoResponse, *http.R
 	return r, resp, nil
 }
 
+// GetWalletsResponse wallet rpc -> get_wallets
+type GetWalletsResponse struct {
+	Success bool      `json:"success"`
+	Wallets []*Wallet `json:"wallets"`
+}
+
+// WalletType types of wallets
+type WalletType uint8
+
+const (
+	// WalletTypeStandard Standard Wallet
+	WalletTypeStandard = WalletType(0)
+
+	// WalletTypeRateLimited Rate Limited Wallet
+	WalletTypeRateLimited = WalletType(1)
+
+	// WalletTypeAtomicSwap Atomic Swap
+	WalletTypeAtomicSwap = WalletType(2)
+
+	// WalletTypeAuthorizedPayee Authorized Payee
+	WalletTypeAuthorizedPayee = WalletType(3)
+
+	// WalletTypeMultiSig Multi Sig
+	WalletTypeMultiSig = WalletType(4)
+
+	// WalletTypeCustody Custody
+	WalletTypeCustody = WalletType(5)
+
+	// WalletTypeColouredCoin Coloured Coin
+	WalletTypeColouredCoin = WalletType(6)
+
+	// WalletTypeRecoverable Recoverable Wallet
+	WalletTypeRecoverable = WalletType(7)
+
+	// WalletTypeDistributedID DID Wallet
+	WalletTypeDistributedID = WalletType(8)
+)
+
+// Wallet single wallet record
+type Wallet struct {
+	Data string     `json:"data"`
+	ID   uint32     `json:"id"`
+	Name string     `json:"name"`
+	Type WalletType `json:"type"`
+}
+
+// GetWallets wallet rpc -> get_wallets
+func (s *WalletService) GetWallets() (*GetWalletsResponse, *http.Response, error) {
+	request, err := s.client.NewRequest(http.MethodPost, ServiceWallet, "get_wallets", nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	r := &GetWalletsResponse{}
+	resp, err := s.client.Do(request, r)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return r, resp, nil
+}
+
 // GetWalletBalanceOptions request options for get_wallet_balance
 type GetWalletBalanceOptions struct {
 	CommonWalletOptions
