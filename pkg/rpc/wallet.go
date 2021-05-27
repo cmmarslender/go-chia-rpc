@@ -7,6 +7,11 @@ type WalletService struct {
 	client *Client
 }
 
+// NewRequest returns a new request specific to the wallet service
+func (s *WalletService) NewRequest(rpcEndpoint Endpoint, opt interface{}) (*Request, error) {
+	return s.client.NewRequest(http.MethodPost, ServiceWallet, rpcEndpoint, opt)
+}
+
 // CommonWalletOptions are common components to every wallet request
 type CommonWalletOptions struct {
 	WalletID uint64 `json:"wallet_id,omitempty"`
@@ -22,7 +27,7 @@ type GetWalletSyncStatusResponse struct {
 
 // GetSyncStatus wallet rpc -> get_sync_status
 func (s *WalletService) GetSyncStatus() (*GetWalletSyncStatusResponse, *http.Response, error) {
-	request, err := s.client.NewRequest(http.MethodPost, ServiceWallet, "get_sync_status", nil)
+	request, err := s.NewRequest("get_sync_status", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -44,7 +49,7 @@ type GetWalletHeightInfoResponse struct {
 
 // GetHeightInfo wallet rpc -> get_height_info
 func (s *WalletService) GetHeightInfo() (*GetWalletHeightInfoResponse, *http.Response, error) {
-	request, err := s.client.NewRequest(http.MethodPost, ServiceWallet, "get_height_info", nil)
+	request, err := s.NewRequest("get_sync_status", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -67,7 +72,7 @@ type GetWalletNetworkInfoResponse struct {
 
 // GetNetworkInfo wallet rpc -> get_network_info
 func (s *WalletService) GetNetworkInfo() (*GetWalletNetworkInfoResponse, *http.Response, error) {
-	request, err := s.client.NewRequest(http.MethodPost, ServiceWallet, "get_network_info", nil)
+	request, err := s.NewRequest("get_sync_status", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -129,7 +134,7 @@ type Wallet struct {
 
 // GetWallets wallet rpc -> get_wallets
 func (s *WalletService) GetWallets() (*GetWalletsResponse, *http.Response, error) {
-	request, err := s.client.NewRequest(http.MethodPost, ServiceWallet, "get_wallets", nil)
+	request, err := s.NewRequest("get_sync_status", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -168,7 +173,7 @@ type WalletBalance struct {
 
 // GetWalletBalance returns wallet balance
 func (s *WalletService) GetWalletBalance(opts *GetWalletBalanceOptions) (*GetWalletBalanceResponse, *http.Response, error) {
-	request, err := s.client.NewRequest(http.MethodPost, ServiceWallet, "get_wallet_balance", opts)
+	request, err := s.NewRequest("get_sync_status", nil)
 	if err != nil {
 		return nil, nil, err
 	}
