@@ -36,6 +36,28 @@ func (s *WalletService) GetSyncStatus() (*GetWalletSyncStatusResponse, *http.Res
 	return wssr, resp, nil
 }
 
+// GetWalletHeightInfoResponse response for get_height_info on wallet
+type GetWalletHeightInfoResponse struct {
+	Height  uint32 `json:"height"`
+	Success bool   `json:"success"`
+}
+
+// GetHeightInfo wallet rpc -> get_height_info
+func (s *WalletService) GetHeightInfo() (*GetWalletHeightInfoResponse, *http.Response, error) {
+	request, err := s.client.NewRequest(http.MethodPost, ServiceWallet, "get_height_info", nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	r := &GetWalletHeightInfoResponse{}
+	resp, err := s.client.Do(request, r)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return r, resp, nil
+}
+
 // GetWalletBalanceOptions request options for get_wallet_balance
 type GetWalletBalanceOptions struct {
 	CommonWalletOptions
