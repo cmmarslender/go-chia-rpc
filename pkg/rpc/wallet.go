@@ -58,6 +58,29 @@ func (s *WalletService) GetHeightInfo() (*GetWalletHeightInfoResponse, *http.Res
 	return r, resp, nil
 }
 
+// GetWalletNetworkInfoResponse response for get_height_info on wallet
+type GetWalletNetworkInfoResponse struct {
+	NetworkName   string `json:"network_name"`
+	NetworkPrefix string `json:"network_prefix"`
+	Success       bool   `json:"success"`
+}
+
+// GetNetworkInfo wallet rpc -> get_network_info
+func (s *WalletService) GetNetworkInfo() (*GetWalletNetworkInfoResponse, *http.Response, error) {
+	request, err := s.client.NewRequest(http.MethodPost, ServiceWallet, "get_network_info", nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	r := &GetWalletNetworkInfoResponse{}
+	resp, err := s.client.Do(request, r)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return r, resp, nil
+}
+
 // GetWalletBalanceOptions request options for get_wallet_balance
 type GetWalletBalanceOptions struct {
 	CommonWalletOptions
