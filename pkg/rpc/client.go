@@ -58,6 +58,10 @@ type Client struct {
 	walletPort    uint16
 	walletKeyPair *tls.Certificate
 	walletClient  *http.Client
+
+	// Services for the different chia services
+	FullNodeService *FullNodeService
+	WalletService   *WalletService
 }
 
 // NewClient returns a new RPC Client
@@ -99,6 +103,10 @@ func NewClient(options ...ClientOptionFunc) (*Client, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	// Init Services
+	c.FullNodeService = &FullNodeService{client: c}
+	c.WalletService = &WalletService{client: c}
 
 	return c, nil
 }

@@ -2,6 +2,11 @@ package rpc
 
 import "net/http"
 
+// WalletService encapsulates wallet RPC methods
+type WalletService struct {
+	client *Client
+}
+
 // CommonWalletOptions are common components to every wallet request
 type CommonWalletOptions struct {
 	WalletID uint64 `json:"wallet_id,omitempty"`
@@ -15,15 +20,15 @@ type GetWalletSyncStatusResponse struct {
 	Syncing            bool `json:"syncing"`
 }
 
-// GetWalletSyncStatus wallet rpc -> get_sync_status
-func (c *Client) GetWalletSyncStatus() (*GetWalletSyncStatusResponse, *http.Response, error) {
-	request, err := c.NewRequest(http.MethodPost, ServiceWallet, "get_sync_status", nil)
+// GetSyncStatus wallet rpc -> get_sync_status
+func (s *WalletService) GetSyncStatus() (*GetWalletSyncStatusResponse, *http.Response, error) {
+	request, err := s.client.NewRequest(http.MethodPost, ServiceWallet, "get_sync_status", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	wssr := &GetWalletSyncStatusResponse{}
-	resp, err := c.Do(request, wssr)
+	resp, err := s.client.Do(request, wssr)
 	if err != nil {
 		return nil, resp, err
 	}
@@ -55,14 +60,14 @@ type WalletBalance struct {
 }
 
 // GetWalletBalance returns wallet balance
-func (c *Client) GetWalletBalance(opts *GetWalletBalanceOptions) (*GetWalletBalanceResponse, *http.Response, error) {
-	request, err := c.NewRequest(http.MethodPost, ServiceWallet, "get_wallet_balance", opts)
+func (s *WalletService) GetWalletBalance(opts *GetWalletBalanceOptions) (*GetWalletBalanceResponse, *http.Response, error) {
+	request, err := s.client.NewRequest(http.MethodPost, ServiceWallet, "get_wallet_balance", opts)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	wbr := &GetWalletBalanceResponse{}
-	resp, err := c.Do(request, wbr)
+	resp, err := s.client.Do(request, wbr)
 	if err != nil {
 		return nil, resp, err
 	}

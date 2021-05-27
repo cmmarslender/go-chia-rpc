@@ -4,6 +4,11 @@ import (
 	"net/http"
 )
 
+// FullNodeService encapsulates full node RPC methods
+type FullNodeService struct {
+	client *Client
+}
+
 // GetBlockchainStateResponse is the blockchain state RPC response
 type GetBlockchainStateResponse struct {
 	Success         bool            `json:"success"`
@@ -67,14 +72,14 @@ type Sync struct {
 }
 
 // GetBlockchainState returns blockchain state
-func (c *Client) GetBlockchainState() (*GetBlockchainStateResponse, *http.Response, error) {
-	request, err := c.NewRequest(http.MethodPost, ServiceFullNode, "get_blockchain_state", nil)
+func (s *FullNodeService) GetBlockchainState() (*GetBlockchainStateResponse, *http.Response, error) {
+	request, err := s.client.NewRequest(http.MethodPost, ServiceFullNode, "get_blockchain_state", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	wbr := &GetBlockchainStateResponse{}
-	resp, err := c.Do(request, wbr)
+	resp, err := s.client.Do(request, wbr)
 	if err != nil {
 		return nil, resp, err
 	}
