@@ -21,11 +21,6 @@ func (s *WalletService) Do(req *Request, v interface{}) (*http.Response, error) 
 	return s.client.Do(req, v)
 }
 
-// CommonWalletOptions are common components to every wallet request
-type CommonWalletOptions struct {
-	WalletID uint32 `json:"wallet_id,omitempty"`
-}
-
 // GetWalletSyncStatusResponse Response for get_sync_status on wallet
 type GetWalletSyncStatusResponse struct {
 	GenesisInitialized bool `json:"genesis_initialized"`
@@ -119,7 +114,7 @@ func (s *WalletService) GetWallets() (*GetWalletsResponse, *http.Response, error
 
 // GetWalletBalanceOptions request options for get_wallet_balance
 type GetWalletBalanceOptions struct {
-	CommonWalletOptions
+	WalletID uint32 `json:"wallet_id"`
 }
 
 // GetWalletBalanceResponse is the wallet balance RPC response
@@ -146,13 +141,13 @@ func (s *WalletService) GetWalletBalance(opts *GetWalletBalanceOptions) (*GetWal
 
 // GetWalletTransactionsOptions options for get wallet transactions
 type GetWalletTransactionsOptions struct {
-	CommonWalletOptions
+	WalletID uint32 `json:"wallet_id"`
 }
 
 // GetWalletTransactionsResponse response for get_wallet_transactions
 type GetWalletTransactionsResponse struct {
+	WalletID     uint32               `json:"wallet_id"`
 	Transactions []*types.Transaction `json:"transactions"`
-	WalletID     uint32
 }
 
 // GetTransactions wallet rpc -> get_transactions
@@ -173,11 +168,11 @@ func (s *WalletService) GetTransactions(opts *GetWalletTransactionsOptions) (*Ge
 
 // GetWalletTransactionOptions options for getting a single wallet transaction
 type GetWalletTransactionOptions struct {
-	CommonWalletOptions
+	WalletID      uint32 `json:"wallet_id"`
 	TransactionID string `json:"transaction_id"`
 }
 
-// GetWalletTransactionsResponse response for get_wallet_transactions
+// GetWalletTransactionResponse response for get_wallet_transactions
 type GetWalletTransactionResponse struct {
 	Transaction   *types.Transaction `json:"transaction"`
 	TransactionID string             `json:"transaction_id"`
