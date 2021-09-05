@@ -27,6 +27,7 @@ package types
 
 import (
 	"encoding/binary"
+	"fmt"
 	"math"
 	"math/big"
 	"math/bits"
@@ -439,4 +440,19 @@ func Uint128FromBig(i *big.Int) (u Uint128) {
 	u.Lo = i.Uint64()
 	u.Hi = new(big.Int).Rsh(i, 64).Uint64()
 	return u
+}
+
+// UnmarshalJSON Uint128 from json
+func (u *Uint128) UnmarshalJSON(data []byte) error {
+	var z big.Int
+	_, ok := z.SetString(string(data), 10)
+	if !ok {
+		return fmt.Errorf("not a valid big integer: %s", data)
+	}
+
+	ui := Uint128FromBig(&z)
+	u.Lo = ui.Lo
+	u.Hi = ui.Hi
+
+	return nil
 }
