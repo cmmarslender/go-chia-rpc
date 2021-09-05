@@ -456,3 +456,18 @@ func (u *Uint128) UnmarshalJSON(data []byte) error {
 
 	return nil
 }
+
+// FitsInUint64 returns true if the value of the Uint128 will fit in Uint64
+func (u *Uint128) FitsInUint64() bool {
+	if u.Hi == 0 {
+		return true
+	}
+
+	return false
+}
+
+// Uint64 returns the Uint64 value of the Int
+// Be careful with this - if the number is larger than Uint64, it will just return nonsense
+func (u *Uint128) Uint64() uint64 {
+	return u.Lo
+}
