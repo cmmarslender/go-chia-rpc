@@ -42,3 +42,23 @@ if err != nil {
 
 log.Println(state.BlockchainState.Difficulty)
 ```
+
+## Get Estimated Network Space
+
+Gets the estimated network space and formats it to a readable version using FormatBytes utility function
+
+```go
+//import (
+//    "log"
+//
+//    "github.com/cmmarslender/go-chia-rpc/pkg/rpc"
+//    "github.com/cmmarslender/go-chia-rpc/pkg/util"
+//)
+
+state, _, err := client.FullNodeService.GetBlockchainState()
+if err != nil {
+    log.Fatal(err)
+}
+
+log.Println(util.FormatBytes(state.BlockchainState.Space))
+```
