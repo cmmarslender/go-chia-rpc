@@ -23,8 +23,8 @@ type BlockRecord struct {
 	RewardInfusionNewChallenge string             `json:"reward_infusion_new_challenge"`
 	SignagePointIndex          uint8              `json:"signage_point_index"`
 	//SubEpochSummaryIncluded
-	SubSlotIters uint64 `json:"sub_slot_iters"`
-	Timestamp    uint64 `json:"timestamp"`
-	//	TotalIters   uint64 `json:"total_iters"` // @TODO this is supposed to be uint128
-	//	Weight       uint64 `json:"weight"`      // @TODO this is supposed to be uint128
+	SubSlotIters uint64  `json:"sub_slot_iters"`
+	Timestamp    uint64  `json:"timestamp"`
+	TotalIters   Uint128 `json:"total_iters"`
+	Weight       Uint128 `json:"weight"`
 }
