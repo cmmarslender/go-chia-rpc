@@ -32,8 +32,8 @@ const (
 	WalletTypeDistributedID = WalletType(8)
 )
 
-// Wallet single wallet record
-type Wallet struct {
+// WalletInfo single wallet record
+type WalletInfo struct {
 	Data string      `json:"data"`
 	ID   uint32      `json:"id"`
 	Name string      `json:"name"`
@@ -42,12 +42,12 @@ type Wallet struct {
 
 // WalletBalance specific wallet balance information
 type WalletBalance struct {
-	ConfirmedWalletBalance   int64 `json:"confirmed_wallet_balance"` // @TODO uint128
-	MaxSendAmount            int64 `json:"max_send_amount"`
-	PendingChange            int64 `json:"pending_change"`
-	SpendableBalance         int64 `json:"spendable_balance"`          // @TODO uint128
-	UnconfirmedWalletBalance int64 `json:"unconfirmed_wallet_balance"` // @TODO uint128
-	UnspentCoinCount         int64 `json:"unspent_coin_count"`
-	PendingCoinRemovalCount  int64 `json:"pending_coin_removal_count"`
-	WalletID                 int32 `json:"wallet_id"`
+	WalletID                 int32   `json:"wallet_id"`
+	ConfirmedWalletBalance   Uint128 `json:"confirmed_wallet_balance"`
+	UnconfirmedWalletBalance Uint128 `json:"unconfirmed_wallet_balance"`
+	SpendableBalance         Uint128 `json:"spendable_balance"`
+	PendingChange            int64   `json:"pending_change"`
+	MaxSendAmount            int64   `json:"max_send_amount"`
+	UnspentCoinCount         int64   `json:"unspent_coin_count"`
+	PendingCoinRemovalCount  int64   `json:"pending_coin_removal_count"`
 }

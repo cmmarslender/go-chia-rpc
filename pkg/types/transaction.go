@@ -1,23 +1,24 @@
 package types
 
-// Transaction Single Transaction
-type Transaction struct {
-	Additions         []*Coin `json:"additions"`
-	Amount            uint64  `json:"amount"`
-	Confirmed         bool    `json:"confirmed"`
-	ConfirmedAtHeight uint32  `json:"confirmed_at_height"`
-	CreatedAtTime     uint64  `json:"created_at_time"`
-	FeeAmount         uint64  `json:"fee_amount"`
-	Name              string  `json:"name"` // @TODO bytes32 / hex
-	Removals          []*Coin `json:"removals"`
-	Sent              uint32  `json:"sent"`
+// TransactionRecord Single Transaction
+type TransactionRecord struct {
+	ConfirmedAtHeight uint32       `json:"confirmed_at_height"`
+	CreatedAtTime     uint64       `json:"created_at_time"` // @TODO time.Time?
+	ToPuzzleHash      *PuzzleHash  `json:"to_puzzle_hash"`
+	Amount            uint64       `json:"amount"`
+	FeeAmount         uint64       `json:"fee_amount"`
+	Confirmed         bool         `json:"confirmed"`
+	Sent              uint32       `json:"sent"`
+	SpendBundle       *SpendBundle `json:"spend_bundle"`
+	Additions         []*Coin      `json:"additions"`
+	Removals          []*Coin      `json:"removals"`
+	WalletID          uint32       `json:"wallet_id"`
 	//SentTo            SentTo          `json:"sent_to"` // @TODO need to properly unserialize this
-	SpendBundle  *SpendBundle     `json:"spend_bundle"`
-	ToAddress    *Address         `json:"to_address"`
-	ToPuzzleHash *PuzzleHash      `json:"to_puzzle_hash"`
-	TradeID      string           `json:"trade_id"`
-	Type         *TransactionType `json:"type"`
-	WalletID     uint32           `json:"wallet_id"`
+	TradeID string           `json:"trade_id"`
+	Type    *TransactionType `json:"type"`
+	Name    string           `json:"name"` // @TODO bytes32 / hex
+	// ToAddress is not on the official type, but some endpoints return it anyways
+	ToAddress *Address `json:"to_address"`
 }
 
 // Address Own type for future methods to encode/decode

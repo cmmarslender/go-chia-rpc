@@ -53,7 +53,7 @@ type GetWalletHeightInfoResponse struct {
 
 // GetHeightInfo wallet rpc -> get_height_info
 func (s *WalletService) GetHeightInfo() (*GetWalletHeightInfoResponse, *http.Response, error) {
-	request, err := s.NewRequest("get_sync_status", nil)
+	request, err := s.NewRequest("get_height_info", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -76,7 +76,7 @@ type GetWalletNetworkInfoResponse struct {
 
 // GetNetworkInfo wallet rpc -> get_network_info
 func (s *WalletService) GetNetworkInfo() (*GetWalletNetworkInfoResponse, *http.Response, error) {
-	request, err := s.NewRequest("get_sync_status", nil)
+	request, err := s.NewRequest("get_network_info", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -92,13 +92,13 @@ func (s *WalletService) GetNetworkInfo() (*GetWalletNetworkInfoResponse, *http.R
 
 // GetWalletsResponse wallet rpc -> get_wallets
 type GetWalletsResponse struct {
-	Success bool            `json:"success"`
-	Wallets []*types.Wallet `json:"wallets"`
+	Success bool                `json:"success"`
+	Wallets []*types.WalletInfo `json:"wallets"`
 }
 
 // GetWallets wallet rpc -> get_wallets
 func (s *WalletService) GetWallets() (*GetWalletsResponse, *http.Response, error) {
-	request, err := s.NewRequest("get_sync_status", nil)
+	request, err := s.NewRequest("get_wallets", nil)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -125,7 +125,7 @@ type GetWalletBalanceResponse struct {
 
 // GetWalletBalance returns wallet balance
 func (s *WalletService) GetWalletBalance(opts *GetWalletBalanceOptions) (*GetWalletBalanceResponse, *http.Response, error) {
-	request, err := s.NewRequest("get_sync_status", nil)
+	request, err := s.NewRequest("get_wallet_balance", opts)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -146,8 +146,8 @@ type GetWalletTransactionsOptions struct {
 
 // GetWalletTransactionsResponse response for get_wallet_transactions
 type GetWalletTransactionsResponse struct {
-	WalletID     uint32               `json:"wallet_id"`
-	Transactions []*types.Transaction `json:"transactions"`
+	WalletID     uint32                     `json:"wallet_id"`
+	Transactions []*types.TransactionRecord `json:"transactions"`
 }
 
 // GetTransactions wallet rpc -> get_transactions
@@ -174,8 +174,8 @@ type GetWalletTransactionOptions struct {
 
 // GetWalletTransactionResponse response for get_wallet_transactions
 type GetWalletTransactionResponse struct {
-	Transaction   *types.Transaction `json:"transaction"`
-	TransactionID string             `json:"transaction_id"`
+	Transaction   *types.TransactionRecord `json:"transaction"`
+	TransactionID string                   `json:"transaction_id"`
 }
 
 // GetTransaction returns a single transaction record
