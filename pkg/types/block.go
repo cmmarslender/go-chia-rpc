@@ -2,31 +2,37 @@ package types
 
 // BlockRecord a single block record
 type BlockRecord struct {
-	ChallengeBlockInfoHash string             `json:"challenge_block_info_hash"`
-	ChallengeVDFOutput     *ClassgroupElement `json:"challenge_vdf_output"`
-	Deficit                uint8              `json:"deficit"`
-	FarmerPuzzleHash       string             `json:"farmer_puzzle_hash"`
-	Fees                   uint64             `json:"fees"`
-	//FinishedChallengeSlotHashes
-	//FinishedInfusedChallengeSlotHashes
-	//FinishedRewardSlotHashes
 	HeaderHash                 string             `json:"header_hash"`
-	Height                     uint32             `json:"height"`
-	InfusedChallengeVDFOutput  *ClassgroupElement `json:"infused_challenge_vdf_output"`
-	Overflow                   bool               `json:"overflow"`
-	PoolPuzzleHash             string             `json:"pool_puzzle_hash"`
 	PrevHash                   string             `json:"prev_hash"`
-	PrevTransactionBlockHash   string             `json:"prev_transaction_block_hash"`
-	PrevTransactionBlockHeight uint32             `json:"prev_transaction_block_height"`
-	RequiredIters              uint64             `json:"required_iters"`
-	RewardClaimsIncorporated   []*Coin            `json:"reward_claims_incorporated"`
-	RewardInfusionNewChallenge string             `json:"reward_infusion_new_challenge"`
+	Height                     uint32             `json:"height"`
+	Weight                     Uint128            `json:"weight"`
+	TotalIters                 Uint128            `json:"total_iters"`
 	SignagePointIndex          uint8              `json:"signage_point_index"`
-	//SubEpochSummaryIncluded
-	SubSlotIters uint64  `json:"sub_slot_iters"`
-	Timestamp    uint64  `json:"timestamp"`
-	TotalIters   Uint128 `json:"total_iters"`
-	Weight       Uint128 `json:"weight"`
+	ChallengeVDFOutput         *ClassgroupElement `json:"challenge_vdf_output"`
+	InfusedChallengeVDFOutput  *ClassgroupElement `json:"infused_challenge_vdf_output"`
+	RewardInfusionNewChallenge string             `json:"reward_infusion_new_challenge"`
+	ChallengeBlockInfoHash     string             `json:"challenge_block_info_hash"`
+	SubSlotIters               uint64             `json:"sub_slot_iters"`
+	PoolPuzzleHash             *PuzzleHash        `json:"pool_puzzle_hash"`
+	FarmerPuzzleHash           *PuzzleHash        `json:"farmer_puzzle_hash"`
+	RequiredIters              uint64             `json:"required_iters"`
+	Deficit                    uint8              `json:"deficit"`
+	Overflow                   bool               `json:"overflow"`
+	PrevTransactionBlockHeight uint32             `json:"prev_transaction_block_height"`
+
+	// Transaction Block - Present if is_transaction_block
+	Timestamp                uint64  `json:"timestamp"` // @TODO time.Time ?
+	PrevTransactionBlockHash string  `json:"prev_transaction_block_hash"`
+	Fees                     uint64  `json:"fees"` // @TODO proper unit (mojo/xch)?
+	RewardClaimsIncorporated []*Coin `json:"reward_claims_incorporated"`
+
+	// Slot - present if this is the first SB in sub slot
+	FinishedChallengeSlotHashes        string `json:"finished_challenge_slot_hashes"`
+	FinishedInfusedChallengeSlotHashes string `json:"finished_infused_challenge_slot_hashes"`
+	FinishedRewardSlotHashes           string `json:"finished_reward_slot_hashes"`
+
+	// Sub-epoch - present if this is the first SB after sub-epoch
+	SubEpochSummaryIncluded *SubEpochSummary `json:"sub_epoch_summary_included"`
 }
 
 // FullBlock a full block
