@@ -457,6 +457,11 @@ func (u *Uint128) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// MarshalJSON marshals the uint128 value to json
+func (u *Uint128) MarshalJSON() ([]byte, error) {
+	return []byte(u.String()), nil
+}
+
 // FitsInUint64 returns true if the value of the Uint128 will fit in Uint64
 func (u *Uint128) FitsInUint64() bool {
 	if u.Hi == 0 {
