@@ -34,11 +34,38 @@ func (s *FullNodeService) GetBlockchainState() (*GetBlockchainStateResponse, *ht
 		return nil, nil, err
 	}
 
-	wbr := &GetBlockchainStateResponse{}
-	resp, err := s.Do(request, wbr)
+	r := &GetBlockchainStateResponse{}
+	resp, err := s.Do(request, r)
 	if err != nil {
 		return nil, resp, err
 	}
 
-	return wbr, resp, nil
+	return r, resp, nil
+}
+
+// GetBlockOptions options for get_block rpc call
+type GetBlockOptions struct {
+	HeaderHash string `json:"header_hash"`
+}
+
+// GetBlockResponse response for get_block rpc call
+type GetBlockResponse struct {
+	Success bool             `json:"success"`
+	Block   *types.FullBlock `json:"block"`
+}
+
+// GetBlock full_node->get_block RPC method
+func (s *FullNodeService) GetBlock(opts *GetBlockOptions) (*GetBlockResponse, *http.Response, error) {
+	request, err := s.NewRequest("get_block", opts)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	r := &GetBlockResponse{}
+	resp, err := s.Do(request, r)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return r, resp, nil
 }

@@ -10,3 +10,14 @@ type SerializedProgram string
 type ClassgroupElement struct {
 	Data string `json:"data"`
 }
+
+// EndOfSubSlotBundle end of subslot bundle
+type EndOfSubSlotBundle struct {
+	// @TODO
+}
+
+// G1Element String for now, can make better later if we need
+type G1Element string
+
+// G2Element String for now, can make better later if we need
+type G2Element string

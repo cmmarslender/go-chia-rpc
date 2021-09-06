@@ -36,13 +36,13 @@ func (s *WalletService) GetSyncStatus() (*GetWalletSyncStatusResponse, *http.Res
 		return nil, nil, err
 	}
 
-	wssr := &GetWalletSyncStatusResponse{}
-	resp, err := s.Do(request, wssr)
+	r := &GetWalletSyncStatusResponse{}
+	resp, err := s.Do(request, r)
 	if err != nil {
 		return nil, resp, err
 	}
 
-	return wssr, resp, nil
+	return r, resp, nil
 }
 
 // GetWalletHeightInfoResponse response for get_height_info on wallet
@@ -130,13 +130,13 @@ func (s *WalletService) GetWalletBalance(opts *GetWalletBalanceOptions) (*GetWal
 		return nil, nil, err
 	}
 
-	wbr := &GetWalletBalanceResponse{}
-	resp, err := s.Do(request, wbr)
+	r := &GetWalletBalanceResponse{}
+	resp, err := s.Do(request, r)
 	if err != nil {
 		return nil, resp, err
 	}
 
-	return wbr, resp, nil
+	return r, resp, nil
 }
 
 // GetWalletTransactionsOptions options for get wallet transactions

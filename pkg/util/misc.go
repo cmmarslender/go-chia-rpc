@@ -7,6 +7,7 @@ import (
 	"github.com/cmmarslender/go-chia-rpc/pkg/types"
 )
 
+// FormatBytes takes bytes as input and outputs a human friendly version
 func FormatBytes(bytes types.Uint128) string {
 	labels := []string{"MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"}
 	base := uint64(1024)

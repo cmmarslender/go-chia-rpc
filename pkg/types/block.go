@@ -28,3 +28,37 @@ type BlockRecord struct {
 	TotalIters   Uint128 `json:"total_iters"`
 	Weight       Uint128 `json:"weight"`
 }
+
+// FullBlock a full block
+type FullBlock struct {
+	FinishedSubSlots             []*EndOfSubSlotBundle    `json:"finished_sub_slots"`
+	RewardChainBlock             *RewardChainBlock        `json:"reward_chain_block"`
+	ChallengeChainSPProof        *VDFProof                `json:"challenge_chain_sp_proof"`
+	ChallengeChainIPProof        *VDFProof                `json:"challenge_chain_ip_proof"`
+	RewardChainSPProof           *VDFProof                `json:"reward_chain_sp_proof"`
+	RewardChainIPProof           *VDFProof                `json:"reward_chain_ip_proof"`
+	InfusedChallengeChainIPProof *VDFProof                `json:"infused_challenge_chain_ip_proof"`
+	Foliage                      *Foliage                 `json:"foliage"`
+	FoliageTransactionBlock      *FoliageTransactionBlock `json:"foliage_transaction_block"`
+	TransactionsInfo             *TransactionsInfo        `json:"transactions_info"`
+	TransactionsGenerator        *SerializedProgram       `json:"transactions_generator"`          // @TODO Verify this is correct
+	TransactionsGeneratorRefList []uint32                 `json:"transactions_generator_ref_list"` // @TODO Verify this is correct
+}
+
+// RewardChainBlock Reward Chain Block
+type RewardChainBlock struct {
+	Weight                     Uint128       `json:"weight"`
+	Height                     uint32        `json:"height"`
+	TotalIters                 Uint128       `json:"total_iters"`
+	SignagePointIndex          uint8         `json:"signage_point_index"`
+	POSSSCCChallengeHash       string        `json:"pos_ss_cc_challenge_hash"`
+	ProofOfSpace               *ProofOfSpace `json:"proof_of_space"`
+	ChallengeChainSPVDF        *VDFInfo      `json:"challenge_chain_sp_vdf"`
+	ChallengeChainSPSignature  *G2Element    `json:"challenge_chain_sp_signature"`
+	ChallengeChainIPVDF        *VDFInfo      `json:"challenge_chain_ip_vdf"`
+	RewardChainSPVDF           *VDFInfo      `json:"reward_chain_sp_vdf"` // Not present for first sp in slot
+	RewardChainSPSignature     *G2Element    `json:"reward_chain_sp_signature"`
+	RewardChainIPVDF           *VDFInfo      `json:"reward_chain_ip_vdf"`
+	InfusedChallengeChainIPVDF *VDFInfo      `json:"infused_challenge_chain_ip_vdf"` // Iff deficit < 16
+	IsTransactionBlock         bool          `json:"is_transaction_block"`
+}
