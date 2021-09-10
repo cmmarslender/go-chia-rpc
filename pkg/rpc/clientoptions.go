@@ -1,6 +1,9 @@
 package rpc
 
-import "crypto/tls"
+import (
+	"crypto/tls"
+	"time"
+)
 
 // ClientOptionFunc can be used to customize a new RPC client.
 type ClientOptionFunc func(*Client) error
@@ -72,6 +75,16 @@ func WithWalletPort(port uint16) ClientOptionFunc {
 func WithWalletKeyPair(keyPair *tls.Certificate) ClientOptionFunc {
 	return func(c *Client) error {
 		c.walletKeyPair = keyPair
+		return nil
+	}
+}
+
+// WithCache specify a duration http requests should be cached for
+// If unset, cache will not be used
+func WithCache(validTime time.Duration) ClientOptionFunc {
+	return func(c *Client) error {
+		c.CacheValidTime = validTime
+
 		return nil
 	}
 }

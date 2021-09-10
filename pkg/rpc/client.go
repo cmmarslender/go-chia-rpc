@@ -11,9 +11,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/google/go-querystring/query"
-
 	"github.com/cmmarslender/go-chia-rpc/pkg/config"
+	"github.com/google/go-querystring/query"
 )
 
 const (
@@ -42,6 +41,9 @@ type Endpoint string
 type Client struct {
 	config  *config.ChiaConfig
 	baseURL *url.URL
+
+	// If set > 0, will configure http requests with a cache
+	CacheValidTime time.Duration
 
 	nodePort    uint16
 	nodeKeyPair *tls.Certificate
@@ -203,14 +205,22 @@ func (c *Client) generateHTTPClientForService(service ServiceType) (*http.Client
 		return nil, fmt.Errorf("unknown service")
 	}
 
-	client := &http.Client{
-		Transport: &http.Transport{
-			TLSClientConfig: &tls.Config{
-				Certificates:       []tls.Certificate{*keyPair},
-				InsecureSkipVerify: true, // Cert is apparently for chia.net - can't validate until it matches hostname
-			},
+	var transport http.RoundTripper
+
+	transport = &http.Transport{
+		TLSClientConfig: &tls.Config{
+			Certificates:       []tls.Certificate{*keyPair},
+			InsecureSkipVerify: true, // Cert is apparently for chia.net - can't validate until it matches hostname
 		},
-		Timeout: 10 * time.Second,
+	}
+
+	if c.CacheValidTime > 0 {
+		transport = NewCachedTransport(c.CacheValidTime, transport)
+	}
+
+	client := &http.Client{
+		Transport: transport,
+		Timeout:   10 * time.Second,
 	}
 
 	return client, nil
