@@ -75,11 +75,13 @@ type GetBlockByHeightOptions struct {
 	BlockHeight int `json:"height"`
 }
 
+// GetBlockRecordResponse response from get_block_record_by_height
 type GetBlockRecordResponse struct {
 	Success     bool               `json:"success"`
 	BlockRecord *types.BlockRecord `json:"block_record"`
 }
 
+// GetBlockRecordByHeight full_node->get_block_record_by_height RPC method
 func (s *FullNodeService) GetBlockRecordByHeight(opts *GetBlockByHeightOptions) (*GetBlockRecordResponse, *http.Response, error) {
 	// Get Block Record
 	request, err := s.NewRequest("get_block_record_by_height", opts)
