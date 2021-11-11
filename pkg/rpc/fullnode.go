@@ -69,3 +69,29 @@ func (s *FullNodeService) GetBlock(opts *GetBlockOptions) (*GetBlockResponse, *h
 
 	return r, resp, nil
 }
+
+// GetBlockByHeightOptions options for get_block_record_by_height and get_block rpc call
+type GetBlockByHeightOptions struct {
+	BlockHeight int `json:"height"`
+}
+
+type GetBlockRecordResponse struct {
+	Success     bool               `json:"success"`
+	BlockRecord *types.BlockRecord `json:"block_record"`
+}
+
+func (s *FullNodeService) GetBlockRecordByHeight(opts *GetBlockByHeightOptions) (*GetBlockRecordResponse, *http.Response, error) {
+	// Get Block Record
+	request, err := s.NewRequest("get_block_record_by_height", opts)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	record := &GetBlockRecordResponse{}
+	resp, err := s.Do(request, record)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return record, resp, nil
+}
