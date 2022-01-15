@@ -169,6 +169,8 @@ func (s *WalletService) GetTransactionCount(opts *GetWalletTransactionCountOptio
 // GetWalletTransactionsOptions options for get wallet transactions
 type GetWalletTransactionsOptions struct {
 	WalletID uint32 `json:"wallet_id"`
+	Start    *int   `json:"start,omitempty"`
+	End      *int   `json:"end,omitempty"`
 }
 
 // GetWalletTransactionsResponse response for get_wallet_transactions
