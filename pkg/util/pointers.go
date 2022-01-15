@@ -1,6 +1,6 @@
 package util
 
-// Int returns a pointer for the provided int
-func Int(i int) *int {
+// IntPtr returns a pointer for the provided int
+func IntPtr(i int) *int {
 	return &i
 }
