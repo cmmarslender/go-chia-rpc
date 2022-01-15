@@ -139,6 +139,33 @@ func (s *WalletService) GetWalletBalance(opts *GetWalletBalanceOptions) (*GetWal
 	return r, resp, nil
 }
 
+// GetWalletTransactionCountOptions options for get transaction count
+type GetWalletTransactionCountOptions struct {
+	WalletID uint32 `json:"wallet_id"`
+}
+
+// GetWalletTransactionCountResponse response for get_wallet_transactions
+type GetWalletTransactionCountResponse struct {
+	WalletID uint32 `json:"wallet_id"`
+	Count    int    `json:"count"`
+}
+
+// GetTransactionCount returns the total count of transactions for the specific wallet ID
+func (s *WalletService) GetTransactionCount(opts *GetWalletTransactionCountOptions) (*GetWalletTransactionCountResponse, *http.Response, error) {
+	request, err := s.NewRequest("get_transaction_count", opts)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	r := &GetWalletTransactionCountResponse{}
+	resp, err := s.Do(request, r)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return r, resp, nil
+}
+
 // GetWalletTransactionsOptions options for get wallet transactions
 type GetWalletTransactionsOptions struct {
 	WalletID uint32 `json:"wallet_id"`
