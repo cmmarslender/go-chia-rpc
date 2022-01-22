@@ -8,7 +8,6 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"strings"
 	"time"
 
 	"github.com/cmmarslender/go-chia-rpc/pkg/config"
@@ -17,7 +16,7 @@ import (
 )
 
 const (
-	defaultHost string = "https://localhost"
+	defaultHost string = "localhost"
 
 	// ServiceDaemon the websocket/daemon service
 	ServiceDaemon ServiceType = 0
@@ -70,6 +69,7 @@ type Client struct {
 	walletClient  *http.Client
 
 	// Services for the different chia services
+	DaemonService   *DaemonService
 	FullNodeService *FullNodeService
 	WalletService   *WalletService
 }
@@ -90,7 +90,10 @@ func NewClient(options ...ClientOptionFunc) (*Client, error) {
 		walletPort:    cfg.Wallet.RPCPort,
 	}
 
-	err = c.setBaseURL(defaultHost)
+	err = c.setBaseURL(&url.URL{
+		Scheme: "https",
+		Host: defaultHost,
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -116,6 +119,7 @@ func NewClient(options ...ClientOptionFunc) (*Client, error) {
 	}
 
 	// Init Services
+	c.DaemonService = &DaemonService{client: c}
 	c.FullNodeService = &FullNodeService{client: c}
 	c.WalletService = &WalletService{client: c}
 
@@ -123,16 +127,8 @@ func NewClient(options ...ClientOptionFunc) (*Client, error) {
 }
 
 // setBaseURL sets the base URL for API requests to a custom endpoint.
-func (c *Client) setBaseURL(urlStr string) error {
-	// Should not have a trailing slash, since we'll be adding port based on service before any slashes
-	urlStr = strings.TrimRight(urlStr, "/")
-
-	baseURL, err := url.Parse(urlStr)
-	if err != nil {
-		return err
-	}
-
-	c.baseURL = baseURL
+func (c *Client) setBaseURL(url *url.URL) error {
+	c.baseURL = url
 
 	return nil
 }

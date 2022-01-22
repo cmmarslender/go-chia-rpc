@@ -2,6 +2,7 @@ package rpc
 
 import (
 	"crypto/tls"
+	"net/url"
 	"time"
 )
 
@@ -9,7 +10,7 @@ import (
 type ClientOptionFunc func(*Client) error
 
 // WithBaseURL sets the host for RPC requests
-func WithBaseURL(url string) ClientOptionFunc {
+func WithBaseURL(url *url.URL) ClientOptionFunc {
 	return func(c *Client) error {
 		return c.setBaseURL(url)
 	}
