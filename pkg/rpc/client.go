@@ -18,6 +18,9 @@ import (
 const (
 	defaultHost string = "https://localhost"
 
+	// ServiceDaemon the websocket/daemon service
+	ServiceDaemon ServiceType = 0
+
 	// ServiceFullNode the full node service
 	ServiceFullNode ServiceType = 1
 
@@ -44,6 +47,9 @@ type Client struct {
 
 	// If set > 0, will configure http requests with a cache
 	CacheValidTime time.Duration
+
+	daemonPort    uint16
+	daemonKeyPair *tls.Certificate
 
 	nodePort    uint16
 	nodeKeyPair *tls.Certificate
@@ -75,6 +81,7 @@ func NewClient(options ...ClientOptionFunc) (*Client, error) {
 
 	c := &Client{
 		config:        cfg,
+		daemonPort:    cfg.DaemonPort,
 		nodePort:      cfg.FullNode.RPCPort,
 		farmerPort:    cfg.Farmer.RPCPort,
 		harvesterPort: cfg.Harvester.RPCPort,
@@ -131,6 +138,11 @@ func (c *Client) setBaseURL(urlStr string) error {
 // Sets the initial key pairs based on config
 func (c *Client) initialKeyPairs() error {
 	var err error
+
+	c.daemonKeyPair, err = c.config.DaemonSSL.LoadPrivateKeyPair()
+	if err != nil {
+		return err
+	}
 
 	c.nodeKeyPair, err = c.config.FullNode.SSL.LoadPrivateKeyPair()
 	if err != nil {
