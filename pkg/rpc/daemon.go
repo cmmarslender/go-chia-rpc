@@ -9,13 +9,16 @@ import (
 
 const origin string = "go-chia-rpc"
 
+type websocketRespHandler func([]byte, error)
+
 // DaemonService encapsulates websocket functionality with the daemon
 type DaemonService struct {
 	client *Client
-
 	conn   *websocket.Conn
+	handler websocketRespHandler
 }
 
+// ensureConnection ensures there is an open websocket connection
 func (d *DaemonService) ensureConnection() error {
 	if d.conn == nil {
 		u := url.URL{Scheme: "wss", Host: fmt.Sprintf("%s:%d", d.client.baseURL.Host, d.client.daemonPort), Path: "/"}
@@ -29,6 +32,7 @@ func (d *DaemonService) ensureConnection() error {
 	return nil
 }
 
+// Do sends a request over the websocket connection
 func (d *DaemonService) Do(req *types.WebsocketRequest) error {
 	err := d.ensureConnection()
 	if err != nil {
@@ -36,6 +40,17 @@ func (d *DaemonService) Do(req *types.WebsocketRequest) error {
 	}
 
 	return d.conn.WriteJSON(req)
+}
+
+// ListenSync Listens for responses over the websocket connection in the foreground
+// The error returned from this function would only correspond to an error setting up the listener
+// Errors returned by ReadMessage, or some other part of the websocket request/response will be
+// passed to the handler to deal with
+func (d *DaemonService) ListenSync(handler websocketRespHandler) error {
+	for {
+		_, message, err := d.conn.ReadMessage()
+		handler(message, err)
+	}
 }
 
 // Subscribe adds a subscription to a particular service
