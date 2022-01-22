@@ -14,9 +14,9 @@ type websocketRespHandler func(*types.WebsocketResponse, error)
 
 // DaemonService encapsulates websocket functionality with the daemon
 type DaemonService struct {
-	client *Client
-	conn   *websocket.Conn
-	handler websocketRespHandler
+	client   *Client
+	conn     *websocket.Conn
+	handlers []websocketRespHandler
 }
 
 // ensureConnection ensures there is an open websocket connection
@@ -41,6 +41,25 @@ func (d *DaemonService) Do(req *types.WebsocketRequest) error {
 	}
 
 	return d.conn.WriteJSON(req)
+}
+
+// AddHandler adds an additional handler function to call when a message is received over the websocket
+// This is expected to NOT be used in conjunction with ListenSync
+// This will run in the background, and allow other things to happen in the foreground
+// while ListenSync will take over the foreground process
+func (d *DaemonService) AddHandler(handler websocketRespHandler) error {
+	d.handlers = append(d.handlers, handler)
+
+	go d.ListenSync(d.handlerProxy)
+	return nil
+}
+
+// handlerProxy matches the websocketRespHandler signature to send requests back to any registered handlers
+// Here to support multiple handlers for a single event in the future
+func (d *DaemonService) handlerProxy(resp *types.WebsocketResponse, err error) {
+	for _, handler := range d.handlers {
+		handler(resp, err)
+	}
 }
 
 // ListenSync Listens for responses over the websocket connection in the foreground
