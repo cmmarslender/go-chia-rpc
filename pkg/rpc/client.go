@@ -13,6 +13,7 @@ import (
 
 	"github.com/cmmarslender/go-chia-rpc/pkg/config"
 	"github.com/google/go-querystring/query"
+	"github.com/gorilla/websocket"
 )
 
 const (
@@ -50,6 +51,7 @@ type Client struct {
 
 	daemonPort    uint16
 	daemonKeyPair *tls.Certificate
+	daemonDialer  *websocket.Dialer
 
 	nodePort    uint16
 	nodeKeyPair *tls.Certificate
@@ -169,6 +171,17 @@ func (c *Client) initialKeyPairs() error {
 
 func (c *Client) generateHTTPClients() error {
 	var err error
+
+	if c.daemonDialer == nil {
+		c.daemonDialer = &websocket.Dialer{
+			Proxy:            http.ProxyFromEnvironment,
+			HandshakeTimeout: 45 * time.Second,
+			TLSClientConfig: &tls.Config{
+				Certificates:       []tls.Certificate{*c.daemonKeyPair},
+				InsecureSkipVerify: true,
+			},
+		}
+	}
 
 	if c.nodeClient == nil {
 		c.nodeClient, err = c.generateHTTPClientForService(ServiceFullNode)
