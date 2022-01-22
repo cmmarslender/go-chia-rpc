@@ -92,7 +92,7 @@ func NewClient(options ...ClientOptionFunc) (*Client, error) {
 
 	err = c.setBaseURL(&url.URL{
 		Scheme: "https",
-		Host: defaultHost,
+		Host:   defaultHost,
 	})
 	if err != nil {
 		return nil, err
