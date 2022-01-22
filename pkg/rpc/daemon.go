@@ -1,6 +1,7 @@
 package rpc
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/cmmarslender/go-chia-rpc/pkg/types"
 	"github.com/gorilla/websocket"
@@ -9,7 +10,7 @@ import (
 
 const origin string = "go-chia-rpc"
 
-type websocketRespHandler func([]byte, error)
+type websocketRespHandler func(*types.WebsocketResponse, error)
 
 // DaemonService encapsulates websocket functionality with the daemon
 type DaemonService struct {
@@ -49,7 +50,9 @@ func (d *DaemonService) Do(req *types.WebsocketRequest) error {
 func (d *DaemonService) ListenSync(handler websocketRespHandler) error {
 	for {
 		_, message, err := d.conn.ReadMessage()
-		handler(message, err)
+		resp := &types.WebsocketResponse{}
+		err = json.Unmarshal(message, resp)
+		handler(resp, err)
 	}
 }
 
@@ -57,9 +60,9 @@ func (d *DaemonService) ListenSync(handler websocketRespHandler) error {
 func (d *DaemonService) Subscribe(service string) error {
 	request := &types.WebsocketRequest{
 		Command:     "register_service",
-		Data:        types.WebsocketSubscription{Service: service},
 		Origin:      origin,
 		Destination: "daemon",
+		Data:        types.WebsocketSubscription{Service: service},
 	}
 
 	return d.Do(request)
