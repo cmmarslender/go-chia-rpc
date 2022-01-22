@@ -1,5 +1,10 @@
 package types
 
+// WebsocketBlockchainState is how blockchain_state comes across in the websockets (wrapped)
+type WebsocketBlockchainState struct {
+	BlockchainState BlockchainState `json:"blockchain_state"`
+}
+
 // BlockchainState blockchain state
 type BlockchainState struct {
 	Difficulty                  uint64       `json:"difficulty"`
