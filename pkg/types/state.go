@@ -11,6 +11,7 @@ type BlockchainState struct {
 	GenesisChallengeInitialized bool         `json:"genesis_challenge_initialized"`
 	MempoolSize                 uint64       `json:"mempool_size"`
 	MempoolCost                 uint64       `json:"mempool_cost"`
+	MempoolMinFee               uint64       `json:"mempool_min_fee"`
 	Peak                        *BlockRecord `json:"peak"`
 	Space                       Uint128      `json:"space"`
 	SubSlotIters                uint64       `json:"sub_slot_iters"`
