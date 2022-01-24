@@ -75,6 +75,13 @@ func (d *DaemonService) ListenSync(handler websocketRespHandler) error {
 	}
 }
 
+// SubscribeSelf calls subscribe for any requests that this client makes to the server
+// Different from Subscribe with a custom service - that is more for subscribing to built in events emitted by Chia
+// This call will subscribe `go-chia-rpc` origin for any requests we specifically make of the server
+func (d *DaemonService) SubscribeSelf() error {
+	return d.Subscribe(origin)
+}
+
 // Subscribe adds a subscription to a particular service
 func (d *DaemonService) Subscribe(service string) error {
 	request := &types.WebsocketRequest{
@@ -82,6 +89,18 @@ func (d *DaemonService) Subscribe(service string) error {
 		Origin:      origin,
 		Destination: "daemon",
 		Data:        types.WebsocketSubscription{Service: service},
+	}
+
+	return d.Do(request)
+}
+
+// GetConnections returns connection info
+func (d *DaemonService) GetConnections() error {
+	request := &types.WebsocketRequest{
+		Command:     "get_connections",
+		Origin:      origin,
+		Destination: "chia_full_node",
+		Data:        map[string]interface{}{},
 	}
 
 	return d.Do(request)
