@@ -21,6 +21,33 @@ func (s *FullNodeService) Do(req *Request, v interface{}) (*http.Response, error
 	return s.client.Do(req, v)
 }
 
+// GetConnectionsOptions options to filter get_connections
+type GetConnectionsOptions struct {
+	NodeType types.NodeType `json:"node_type,omitempty"`
+}
+
+// GetConnectionsResponse get_connections response format
+type GetConnectionsResponse struct {
+	Success     bool               `json:"success"`
+	Connections []types.Connection `json:"connections"`
+}
+
+// GetConnections returns connections
+func (s *FullNodeService) GetConnections(opts *GetConnectionsOptions) (*GetConnectionsResponse, *http.Response, error) {
+	request, err := s.NewRequest("get_connections", opts)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	c := &GetConnectionsResponse{}
+	resp, err := s.Do(request, c)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return c, resp, nil
+}
+
 // GetBlockchainStateResponse is the blockchain state RPC response
 type GetBlockchainStateResponse struct {
 	Success         bool                   `json:"success"`
