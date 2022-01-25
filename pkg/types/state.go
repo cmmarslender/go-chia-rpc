@@ -16,6 +16,7 @@ type BlockchainState struct {
 	Space                       Uint128         `json:"space"`
 	SubSlotIters                uint64          `json:"sub_slot_iters"`
 	Sync                        *Sync           `json:"sync"`
+	MaxCost                     uint64          `json:"block_max_cost"`
 }
 
 // MempoolMinFees minimum fees to get in the mempool at varying costs

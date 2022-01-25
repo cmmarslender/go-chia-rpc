@@ -75,3 +75,34 @@ type BlockCountMetrics struct {
 	UncompactBlocks uint32 `json:"uncompact_blocks"`
 	HintCount       uint64 `json:"hint_count"`
 }
+
+// ReceiveBlockResult When Blockchain.receive_block(b) is called, one of these results is returned,
+// showing whether the block was added to the chain (extending the peak),
+// and if not, why it was not added.
+type ReceiveBlockResult uint8
+
+const (
+	// ReceiveBlockResultNewPeak Added to the peak of the blockchain
+	ReceiveBlockResultNewPeak ReceiveBlockResult = 1
+
+	// ReceiveBlockResultOrphan Added as an orphan/stale block (not a new peak of the chain)
+	ReceiveBlockResultOrphan ReceiveBlockResult = 2
+
+	// ReceiveBlockResultInvalidBlock Block was not added because it was invalid
+	ReceiveBlockResultInvalidBlock ReceiveBlockResult = 3
+
+	// ReceiveBlockResultAlreadyHaveBlock Block is already present in this blockchain
+	ReceiveBlockResultAlreadyHaveBlock ReceiveBlockResult = 4
+
+	// ReceiveBlockResultDisconnectedBlock Block's parent (previous pointer) is not in this blockchain
+	ReceiveBlockResultDisconnectedBlock ReceiveBlockResult = 5
+)
+
+// BlockEvent data from block websocket event
+type BlockEvent struct {
+	BlockCost                     uint64             `json:"block_cost"`
+	BlockFees                     uint64             `json:"block_fees"`
+	TransactionGeneratorSizeBytes uint64             `json:"transaction_generator_size_bytes"`
+	TransactionGeneratorRefList   []uint32           `json:"transaction_generator_ref_list"`
+	ReceiveBlockResult            ReceiveBlockResult `json:"receive_block_result"`
+}
