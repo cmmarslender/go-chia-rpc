@@ -11,7 +11,7 @@ type BlockchainState struct {
 	GenesisChallengeInitialized bool            `json:"genesis_challenge_initialized"`
 	MempoolSize                 uint64          `json:"mempool_size"`
 	MempoolCost                 uint64          `json:"mempool_cost"`
-	MempoolMinFee               *MempoolMinFees `json:"mempool_min_fee"`
+	MempoolMinFee               *MempoolMinFees `json:"mempool_min_fees"`
 	Peak                        *BlockRecord    `json:"peak"`
 	Space                       Uint128         `json:"space"`
 	SubSlotIters                uint64          `json:"sub_slot_iters"`
@@ -23,7 +23,7 @@ type BlockchainState struct {
 
 // MempoolMinFees minimum fees to get in the mempool at varying costs
 type MempoolMinFees struct {
-	Cost5m uint64 `json:"5000000"`
+	Cost5m uint64 `json:"cost_5000000"`
 }
 
 // Sync struct within blockchain state
