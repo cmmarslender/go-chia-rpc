@@ -125,6 +125,29 @@ func (s *FullNodeService) GetBlocks(opts *GetBlocksOptions) (*GetBlocksResponse,
 	return r, resp, nil
 }
 
+// GetBlockCountMetricsResponse response for get_block_count_metrics rpc call
+type GetBlockCountMetricsResponse struct {
+	Success bool                     `json:"success"`
+	Metrics *types.BlockCountMetrics `json:"metrics"`
+}
+
+// GetBlockCountMetrics gets metrics about blocks
+func (s *FullNodeService) GetBlockCountMetrics() (*GetBlockCountMetricsResponse, *http.Response, error) {
+	request, err := s.NewRequest("get_block", nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	r := &GetBlockCountMetricsResponse{}
+
+	resp, err := s.Do(request, r)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return r, resp, nil
+}
+
 // GetBlockByHeightOptions options for get_block_record_by_height and get_block rpc call
 type GetBlockByHeightOptions struct {
 	BlockHeight int `json:"height"`

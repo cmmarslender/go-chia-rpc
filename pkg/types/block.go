@@ -68,3 +68,10 @@ type RewardChainBlock struct {
 	InfusedChallengeChainIPVDF *VDFInfo      `json:"infused_challenge_chain_ip_vdf"` // Iff deficit < 16
 	IsTransactionBlock         bool          `json:"is_transaction_block"`
 }
+
+// BlockCountMetrics metrics from get_block_count_metrics endpoint
+type BlockCountMetrics struct {
+	CompactBlocks   uint32 `json:"compact_blocks"`
+	UncompactBlocks uint32 `json:"uncompact_blocks"`
+	HintCount       uint64 `json:"hint_count"`
+}
