@@ -445,6 +445,9 @@ func Uint128FromBig(i *big.Int) (u Uint128) {
 // UnmarshalJSON Uint128 from json
 func (u *Uint128) UnmarshalJSON(data []byte) error {
 	var z big.Int
+	if string(data) == "null" {
+		data = []byte("0")
+	}
 	_, ok := z.SetString(string(data), 10)
 	if !ok {
 		return fmt.Errorf("not a valid big integer: %s", data)
