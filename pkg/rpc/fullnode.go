@@ -28,8 +28,8 @@ type GetConnectionsOptions struct {
 
 // GetConnectionsResponse get_connections response format
 type GetConnectionsResponse struct {
-	Success     bool               `json:"success"`
-	Connections []types.Connection `json:"connections"`
+	Success     bool                `json:"success"`
+	Connections []*types.Connection `json:"connections"`
 }
 
 // GetConnections returns connections
