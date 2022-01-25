@@ -94,10 +94,22 @@ func (d *DaemonService) Subscribe(service string) error {
 	return d.Do(request)
 }
 
-// GetConnections returns connection info
+// GetConnections requests connection info
 func (d *DaemonService) GetConnections() error {
 	request := &types.WebsocketRequest{
 		Command:     "get_connections",
+		Origin:      origin,
+		Destination: "chia_full_node",
+		Data:        map[string]interface{}{},
+	}
+
+	return d.Do(request)
+}
+
+// GetBlockCountMetrics requests block count metrics
+func (d *DaemonService) GetBlockCountMetrics() error {
+	request := &types.WebsocketRequest{
+		Command:     "get_block_count_metrics",
 		Origin:      origin,
 		Destination: "chia_full_node",
 		Data:        map[string]interface{}{},
