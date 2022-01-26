@@ -94,6 +94,18 @@ func (d *DaemonService) Subscribe(service string) error {
 	return d.Do(request)
 }
 
+// GetBlockchainState requests blockchain state
+func (d *DaemonService) GetBlockchainState() error {
+	request := &types.WebsocketRequest{
+		Command:     "get_blockchain_state",
+		Origin:      origin,
+		Destination: "chia_full_node",
+		Data:        map[string]interface{}{},
+	}
+
+	return d.Do(request)
+}
+
 // GetConnections requests connection info
 func (d *DaemonService) GetConnections() error {
 	request := &types.WebsocketRequest{
