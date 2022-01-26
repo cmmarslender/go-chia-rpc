@@ -70,3 +70,10 @@ type CoinSolution struct {
 	PuzzleReveal *SerializedProgram `json:"puzzle_reveal"`
 	Solution     *SerializedProgram `json:"solution"`
 }
+
+// CoinAddedEvent data from coin-added websocket event
+type CoinAddedEvent struct {
+	Success  bool   `json:"success"`
+	State    string `json:"state"`
+	WalletID uint32 `json:"wallet_id"`
+}
