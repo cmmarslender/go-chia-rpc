@@ -143,3 +143,15 @@ func (d *DaemonService) GetBlockCountMetrics() error {
 
 	return d.Do(request)
 }
+
+// GetWalletBalance requests the wallet balance for a particular wallet
+func (d *DaemonService) GetWalletBalance(opts *GetWalletBalanceOptions) error {
+	request := &types.WebsocketRequest{
+		Command:     "get_wallet_balance",
+		Origin:      origin,
+		Destination: "chia_wallet",
+		Data:        opts,
+	}
+
+	return d.Do(request)
+}
