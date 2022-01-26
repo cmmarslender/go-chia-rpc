@@ -33,8 +33,8 @@ func (d *DaemonService) ensureConnection() error {
 	return nil
 }
 
-// closeConnection closes the websocket connection if it is open
-func (d *DaemonService) closeConnection() error {
+// CloseConnection closes the websocket connection if it is open
+func (d *DaemonService) CloseConnection() error {
 	if d.conn != nil {
 		d.conn = nil
 
