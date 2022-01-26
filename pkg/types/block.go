@@ -101,6 +101,7 @@ const (
 // BlockEvent data from block websocket event
 type BlockEvent struct {
 	TransactionBlock              bool               `json:"transaction_block"`
+	KSize                         uint8              `json:"k_size"`
 	BlockCost                     uint64             `json:"block_cost"`
 	BlockFees                     uint64             `json:"block_fees"`
 	TransactionGeneratorSizeBytes uint64             `json:"transaction_generator_size_bytes"`
