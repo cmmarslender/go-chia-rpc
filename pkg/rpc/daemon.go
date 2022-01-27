@@ -155,3 +155,15 @@ func (d *DaemonService) GetWalletBalance(opts *GetWalletBalanceOptions) error {
 
 	return d.Do(request)
 }
+
+// GetSyncStatus requests the sync status for the logged in wallet
+func (d *DaemonService) GetSyncStatus() error {
+	request := &types.WebsocketRequest{
+		Command:     "get_sync_status",
+		Origin:      origin,
+		Destination: "chia_wallet",
+		Data:        map[string]interface{}{},
+	}
+
+	return d.Do(request)
+}
