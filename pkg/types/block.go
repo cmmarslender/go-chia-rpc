@@ -27,9 +27,9 @@ type BlockRecord struct {
 	RewardClaimsIncorporated []*Coin `json:"reward_claims_incorporated"`
 
 	// Slot - present if this is the first SB in sub slot
-	FinishedChallengeSlotHashes        string `json:"finished_challenge_slot_hashes"`
-	FinishedInfusedChallengeSlotHashes string `json:"finished_infused_challenge_slot_hashes"`
-	FinishedRewardSlotHashes           string `json:"finished_reward_slot_hashes"`
+	FinishedChallengeSlotHashes        []string `json:"finished_challenge_slot_hashes"`
+	FinishedInfusedChallengeSlotHashes []string `json:"finished_infused_challenge_slot_hashes"`
+	FinishedRewardSlotHashes           []string `json:"finished_reward_slot_hashes"`
 
 	// Sub-epoch - present if this is the first SB after sub-epoch
 	SubEpochSummaryIncluded *SubEpochSummary `json:"sub_epoch_summary_included"`

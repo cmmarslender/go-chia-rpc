@@ -70,6 +70,34 @@ func (s *FullNodeService) GetBlock(opts *GetBlockOptions) (*GetBlockResponse, *h
 	return r, resp, nil
 }
 
+// GetBlocksOptions options for get_blocks rpc call
+type GetBlocksOptions struct {
+	Start int `json:"start"`
+	End   int `json:"end"`
+}
+
+// GetBlocksResponse response for get_blocks rpc call
+type GetBlocksResponse struct {
+	Success bool               `json:"success"`
+	Blocks  []*types.FullBlock `json:"blocks"`
+}
+
+// GetBlock full_node->get_blocks RPC method
+func (s *FullNodeService) GetBlocks(opts *GetBlocksOptions) (*GetBlocksResponse, *http.Response, error) {
+	request, err := s.NewRequest("get_blocks", opts)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	r := &GetBlocksResponse{}
+	resp, err := s.Do(request, r)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return r, resp, nil
+}
+
 // GetBlockByHeightOptions options for get_block_record_by_height and get_block rpc call
 type GetBlockByHeightOptions struct {
 	BlockHeight int `json:"height"`
@@ -95,5 +123,36 @@ func (s *FullNodeService) GetBlockRecordByHeight(opts *GetBlockByHeightOptions) 
 		return nil, resp, err
 	}
 
+	// @TODO handle this correctly
+	// I believe this happens when the node is not yet synced to this height
+	if record == nil || record.BlockRecord == nil {
+		return nil, nil, nil
+	}
+
 	return record, resp, nil
+}
+
+// GetBlockByHeight helper function to get a full block by height, calls full_node->get_block_record_by_height RPC method then full_node->get_block RPC method
+func (s *FullNodeService) GetBlockByHeight(opts *GetBlockByHeightOptions) (*GetBlockResponse, *http.Response, error) {
+	// Get Block Record
+	record, resp, err := s.GetBlockRecordByHeight(opts)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	request, err := s.NewRequest("get_block", GetBlockOptions{
+		HeaderHash: record.BlockRecord.HeaderHash,
+	})
+	if err != nil {
+		return nil, nil, err
+	}
+
+	// Get Full Block
+	block := &GetBlockResponse{}
+	resp, err = s.Do(request, block)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return block, resp, nil
 }
