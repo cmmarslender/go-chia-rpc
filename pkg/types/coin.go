@@ -12,11 +12,13 @@ const (
 // Mojo is a special type for Mojos, to keep track of what unit an amount is
 type Mojo int64
 
+// MarshalJSON marshals Mojo into json
 func (m Mojo) MarshalJSON() ([]byte, error) {
 	s := strconv.FormatInt(int64(m), 10)
 	return []byte(s), nil
 }
 
+// UnmarshalJSON unmarshals json data into Mojo
 func (m *Mojo) UnmarshalJSON(data []byte) error {
 	mojo, err := strconv.ParseUint(string(data), 10, 64)
 	if err != nil {
@@ -29,11 +31,13 @@ func (m *Mojo) UnmarshalJSON(data []byte) error {
 // XCH is a special type for Chia, to keep track of what unit an amount is
 type XCH float64
 
+// MarshalJSON marshals XCH into json
 func (xch XCH) MarshalJSON() ([]byte, error) {
 	s := fmt.Sprintf("%f", xch)
 	return []byte(s), nil
 }
 
+// UnmarshalJSON unmarshals json data into XCH
 func (xch *XCH) UnmarshalJSON(data []byte) error {
 	x, err := strconv.ParseFloat(string(data), 64)
 	if err != nil {
@@ -44,8 +48,8 @@ func (xch *XCH) UnmarshalJSON(data []byte) error {
 }
 
 // ToMojo converts chia to mojos
-func (c XCH) ToMojo() Mojo {
-	return Mojo(c * XCH(mojoInChia))
+func (xch XCH) ToMojo() Mojo {
+	return Mojo(xch * XCH(mojoInChia))
 }
 
 // ToChia converts mojo to chia

@@ -82,7 +82,7 @@ type GetBlocksResponse struct {
 	Blocks  []*types.FullBlock `json:"blocks"`
 }
 
-// GetBlock full_node->get_blocks RPC method
+// GetBlocks full_node->get_blocks RPC method
 func (s *FullNodeService) GetBlocks(opts *GetBlocksOptions) (*GetBlocksResponse, *http.Response, error) {
 	request, err := s.NewRequest("get_blocks", opts)
 	if err != nil {
