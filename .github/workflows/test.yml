@@ -1,6 +1,7 @@
 name: Test/Lint/Fmt/Vet
 on:
   push:
+  pull_request:
 
 jobs:
   test:
