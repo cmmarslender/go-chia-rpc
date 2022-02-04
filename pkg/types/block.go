@@ -1,10 +1,5 @@
 package types
 
-import (
-	"encoding/json"
-	"strconv"
-)
-
 // BlockRecord a single block record
 type BlockRecord struct {
 	HeaderHash                 string             `json:"header_hash"`
@@ -40,45 +35,6 @@ type BlockRecord struct {
 	SubEpochSummaryIncluded *SubEpochSummary `json:"sub_epoch_summary_included"`
 }
 
-type FullblockOrInt struct {
-	Block    *FullBlock
-	BlockRef uint32
-}
-
-// MarshalJSON convert this object to JSON
-func (b FullblockOrInt) MarshalJSON() ([]byte, error) {
-	if b.Block != nil {
-		return json.Marshal(b.Block)
-	}
-
-	return json.Marshal(b.BlockRef)
-}
-
-// UnmarshalJSON converts this bool or schema object from a JSON structure
-func (b *FullblockOrInt) UnmarshalJSON(data []byte) error {
-	var bi FullblockOrInt
-	if len(data) > 0 {
-		if data[0] == '{' {
-			var block FullBlock
-			if err := json.Unmarshal(data, &block); err != nil {
-				return err
-			}
-			bi.Block = &block
-		}
-
-		if bi.Block == nil {
-			if i, err := strconv.Atoi(string(data)); err != nil {
-				return err
-			} else {
-				bi.BlockRef = uint32(i)
-			}
-		}
-	}
-
-	*b = bi
-	return nil
-}
-
 // FullBlock a full block
 type FullBlock struct {
 	FinishedSubSlots             []*EndOfSubSlotBundle    `json:"finished_sub_slots"`
@@ -92,7 +48,7 @@ type FullBlock struct {
 	FoliageTransactionBlock      *FoliageTransactionBlock `json:"foliage_transaction_block"`
 	TransactionsInfo             *TransactionsInfo        `json:"transactions_info"`
 	TransactionsGenerator        *SerializedProgram       `json:"transactions_generator"`          // @TODO Verify this is correct
-	TransactionsGeneratorRefList []FullblockOrInt         `json:"transactions_generator_ref_list"` // @TODO Verify this is correct
+	TransactionsGeneratorRefList []uint32                 `json:"transactions_generator_ref_list"` // @TODO Verify this is correct
 }
 
 // RewardChainBlock Reward Chain Block
