@@ -15,6 +15,12 @@ const (
 
 	// ServiceWallet the wallet service
 	ServiceWallet ServiceType = 4
+
+	// ServiceTimelord is the timelord service
+	ServiceTimelord ServiceType = 5
+
+	// ServicePeer full node service, but for communicating with full nodes using the public protocol
+	ServicePeer ServiceType = 6
 )
 
 // ServiceType is a type that refers to a particular service
