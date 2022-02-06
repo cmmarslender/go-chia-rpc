@@ -11,7 +11,7 @@ import (
 
 // Client is the RPC client
 type Client struct {
-	config  *config.ChiaConfig
+	config *config.ChiaConfig
 
 	activeClient rpcinterface.Client
 

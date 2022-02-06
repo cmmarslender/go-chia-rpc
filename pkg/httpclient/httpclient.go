@@ -5,7 +5,7 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
-	"github.com/cmmarslender/go-chia-rpc/pkg/config"
+	"github.com/cmmarslender/go-chia-lib/pkg/config"
 	"github.com/cmmarslender/go-chia-rpc/pkg/rpcinterface"
 	"github.com/google/go-querystring/query"
 	"io"

@@ -4,7 +4,7 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
-	"github.com/cmmarslender/go-chia-rpc/pkg/config"
+	"github.com/cmmarslender/go-chia-lib/pkg/config"
 	"github.com/cmmarslender/go-chia-rpc/pkg/rpcinterface"
 	"github.com/cmmarslender/go-chia-rpc/pkg/types"
 	"github.com/gorilla/websocket"
