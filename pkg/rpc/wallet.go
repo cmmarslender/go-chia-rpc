@@ -1,6 +1,7 @@
 package rpc
 
 import (
+	"github.com/cmmarslender/go-chia-rpc/pkg/rpcinterface"
 	"net/http"
 
 	"github.com/cmmarslender/go-chia-rpc/pkg/types"
@@ -12,12 +13,12 @@ type WalletService struct {
 }
 
 // NewRequest returns a new request specific to the wallet service
-func (s *WalletService) NewRequest(rpcEndpoint Endpoint, opt interface{}) (*Request, error) {
-	return s.client.NewRequest(http.MethodPost, ServiceWallet, rpcEndpoint, opt)
+func (s *WalletService) NewRequest(rpcEndpoint rpcinterface.Endpoint, opt interface{}) (*rpcinterface.Request, error) {
+	return s.client.NewRequest(rpcinterface.ServiceWallet, rpcEndpoint, opt)
 }
 
 // Do is just a shortcut to the client's Do method
-func (s *WalletService) Do(req *Request, v interface{}) (*http.Response, error) {
+func (s *WalletService) Do(req *rpcinterface.Request, v interface{}) (*http.Response, error) {
 	return s.client.Do(req, v)
 }
 

@@ -1,6 +1,7 @@
 package rpc
 
 import (
+	"github.com/cmmarslender/go-chia-rpc/pkg/rpcinterface"
 	"net/http"
 
 	"github.com/cmmarslender/go-chia-rpc/pkg/types"
@@ -12,12 +13,12 @@ type FullNodeService struct {
 }
 
 // NewRequest returns a new request specific to the wallet service
-func (s *FullNodeService) NewRequest(rpcEndpoint Endpoint, opt interface{}) (*Request, error) {
-	return s.client.NewRequest(http.MethodPost, ServiceFullNode, rpcEndpoint, opt)
+func (s *FullNodeService) NewRequest(rpcEndpoint rpcinterface.Endpoint, opt interface{}) (*rpcinterface.Request, error) {
+	return s.client.NewRequest(rpcinterface.ServiceFullNode, rpcEndpoint, opt)
 }
 
 // Do is just a shortcut to the client's Do method
-func (s *FullNodeService) Do(req *Request, v interface{}) (*http.Response, error) {
+func (s *FullNodeService) Do(req *rpcinterface.Request, v interface{}) (*http.Response, error) {
 	return s.client.Do(req, v)
 }
 
@@ -133,7 +134,7 @@ type GetBlockCountMetricsResponse struct {
 
 // GetBlockCountMetrics gets metrics about blocks
 func (s *FullNodeService) GetBlockCountMetrics() (*GetBlockCountMetricsResponse, *http.Response, error) {
-	request, err := s.NewRequest("get_block", nil)
+	request, err := s.NewRequest("get_block_count_metrics", nil)
 	if err != nil {
 		return nil, nil, err
 	}
