@@ -102,9 +102,12 @@ const (
 type BlockEvent struct {
 	TransactionBlock              bool               `json:"transaction_block"`
 	KSize                         uint8              `json:"k_size"`
+	HeaderHash                    string             `json:"header_hash"`
+	Height                        uint32             `json:"height"`
 	BlockCost                     uint64             `json:"block_cost"`
 	BlockFees                     uint64             `json:"block_fees"`
 	TransactionGeneratorSizeBytes uint64             `json:"transaction_generator_size_bytes"`
 	TransactionGeneratorRefList   []uint32           `json:"transaction_generator_ref_list"`
 	ReceiveBlockResult            ReceiveBlockResult `json:"receive_block_result"`
+	//Timestamp                     type                `json:"timestamp"`
 }
