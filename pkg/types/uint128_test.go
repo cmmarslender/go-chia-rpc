@@ -28,6 +28,7 @@ package types_test
 import (
 	"crypto/rand"
 	"encoding/binary"
+	"encoding/json"
 	"math"
 	"math/big"
 	"testing"
@@ -468,4 +469,32 @@ func BenchmarkString(b *testing.B) {
 			_ = xb.String()
 		}
 	})
+}
+
+func TestUint128_UnmarshalJSON(t *testing.T) {
+	jsondata := []byte(`{"int128":18446744073709551616}`)
+	structDef := &struct {
+		Int128 types.Uint128 `json:"int128"`
+	}{}
+	err := json.Unmarshal(jsondata, structDef)
+	if err != nil {
+		t.Error(err)
+	}
+	if structDef.Int128.String() != "18446744073709551616" {
+		t.Error("value did not parse correctly")
+	}
+}
+
+func TestUint128_UnmarshalJSON_Null(t *testing.T) {
+	jsondata := []byte(`{"int128":null}`)
+	structDef := &struct {
+		Int128 types.Uint128 `json:"int128"`
+	}{}
+	err := json.Unmarshal(jsondata, structDef)
+	if err != nil {
+		t.Error(err)
+	}
+	if structDef.Int128.String() != "0" {
+		t.Error("`null` did not unmarshal as zero")
+	}
 }

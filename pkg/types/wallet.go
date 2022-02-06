@@ -43,6 +43,7 @@ type WalletInfo struct {
 // WalletBalance specific wallet balance information
 type WalletBalance struct {
 	WalletID                 int32   `json:"wallet_id"`
+	Fingerprint              int     `json:"fingerprint"`
 	ConfirmedWalletBalance   Uint128 `json:"confirmed_wallet_balance"`
 	UnconfirmedWalletBalance Uint128 `json:"unconfirmed_wallet_balance"`
 	SpendableBalance         Uint128 `json:"spendable_balance"`

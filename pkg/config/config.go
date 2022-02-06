@@ -10,10 +10,12 @@ import (
 
 // ChiaConfig the chia config.yaml
 type ChiaConfig struct {
-	Farmer    FarmerConfig    `yaml:"farmer"`
-	FullNode  FullNodeConfig  `yaml:"full_node"`
-	Harvester HarvesterConfig `yaml:"harvester"`
-	Wallet    WalletConfig    `yaml:"wallet"`
+	DaemonPort uint16          `yaml:"daemon_port"`
+	DaemonSSL  SSLConfig       `yaml:"daemon_ssl"`
+	Farmer     FarmerConfig    `yaml:"farmer"`
+	FullNode   FullNodeConfig  `yaml:"full_node"`
+	Harvester  HarvesterConfig `yaml:"harvester"`
+	Wallet     WalletConfig    `yaml:"wallet"`
 }
 
 // FarmerConfig farmer configuration section

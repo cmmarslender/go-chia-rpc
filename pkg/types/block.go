@@ -68,3 +68,46 @@ type RewardChainBlock struct {
 	InfusedChallengeChainIPVDF *VDFInfo      `json:"infused_challenge_chain_ip_vdf"` // Iff deficit < 16
 	IsTransactionBlock         bool          `json:"is_transaction_block"`
 }
+
+// BlockCountMetrics metrics from get_block_count_metrics endpoint
+type BlockCountMetrics struct {
+	CompactBlocks   uint32 `json:"compact_blocks"`
+	UncompactBlocks uint32 `json:"uncompact_blocks"`
+	HintCount       uint64 `json:"hint_count"`
+}
+
+// ReceiveBlockResult When Blockchain.receive_block(b) is called, one of these results is returned,
+// showing whether the block was added to the chain (extending the peak),
+// and if not, why it was not added.
+type ReceiveBlockResult uint8
+
+const (
+	// ReceiveBlockResultNewPeak Added to the peak of the blockchain
+	ReceiveBlockResultNewPeak ReceiveBlockResult = 1
+
+	// ReceiveBlockResultOrphan Added as an orphan/stale block (not a new peak of the chain)
+	ReceiveBlockResultOrphan ReceiveBlockResult = 2
+
+	// ReceiveBlockResultInvalidBlock Block was not added because it was invalid
+	ReceiveBlockResultInvalidBlock ReceiveBlockResult = 3
+
+	// ReceiveBlockResultAlreadyHaveBlock Block is already present in this blockchain
+	ReceiveBlockResultAlreadyHaveBlock ReceiveBlockResult = 4
+
+	// ReceiveBlockResultDisconnectedBlock Block's parent (previous pointer) is not in this blockchain
+	ReceiveBlockResultDisconnectedBlock ReceiveBlockResult = 5
+)
+
+// BlockEvent data from block websocket event
+type BlockEvent struct {
+	TransactionBlock              bool               `json:"transaction_block"`
+	KSize                         uint8              `json:"k_size"`
+	HeaderHash                    string             `json:"header_hash"`
+	Height                        uint32             `json:"height"`
+	BlockCost                     uint64             `json:"block_cost"`
+	BlockFees                     uint64             `json:"block_fees"`
+	TransactionGeneratorSizeBytes uint64             `json:"transaction_generator_size_bytes"`
+	TransactionGeneratorRefList   []uint32           `json:"transaction_generator_ref_list"`
+	ReceiveBlockResult            ReceiveBlockResult `json:"receive_block_result"`
+	//Timestamp                     type                `json:"timestamp"`
+}

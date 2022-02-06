@@ -1,6 +1,7 @@
 package rpc
 
 import (
+	"github.com/cmmarslender/go-chia-rpc/pkg/rpcinterface"
 	"net/http"
 
 	"github.com/cmmarslender/go-chia-rpc/pkg/types"
@@ -12,13 +13,40 @@ type FullNodeService struct {
 }
 
 // NewRequest returns a new request specific to the wallet service
-func (s *FullNodeService) NewRequest(rpcEndpoint Endpoint, opt interface{}) (*Request, error) {
-	return s.client.NewRequest(http.MethodPost, ServiceFullNode, rpcEndpoint, opt)
+func (s *FullNodeService) NewRequest(rpcEndpoint rpcinterface.Endpoint, opt interface{}) (*rpcinterface.Request, error) {
+	return s.client.NewRequest(rpcinterface.ServiceFullNode, rpcEndpoint, opt)
 }
 
 // Do is just a shortcut to the client's Do method
-func (s *FullNodeService) Do(req *Request, v interface{}) (*http.Response, error) {
+func (s *FullNodeService) Do(req *rpcinterface.Request, v interface{}) (*http.Response, error) {
 	return s.client.Do(req, v)
+}
+
+// GetConnectionsOptions options to filter get_connections
+type GetConnectionsOptions struct {
+	NodeType types.NodeType `json:"node_type,omitempty"`
+}
+
+// GetConnectionsResponse get_connections response format
+type GetConnectionsResponse struct {
+	Success     bool                `json:"success"`
+	Connections []*types.Connection `json:"connections"`
+}
+
+// GetConnections returns connections
+func (s *FullNodeService) GetConnections(opts *GetConnectionsOptions) (*GetConnectionsResponse, *http.Response, error) {
+	request, err := s.NewRequest("get_connections", opts)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	c := &GetConnectionsResponse{}
+	resp, err := s.Do(request, c)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return c, resp, nil
 }
 
 // GetBlockchainStateResponse is the blockchain state RPC response
@@ -90,6 +118,29 @@ func (s *FullNodeService) GetBlocks(opts *GetBlocksOptions) (*GetBlocksResponse,
 	}
 
 	r := &GetBlocksResponse{}
+	resp, err := s.Do(request, r)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return r, resp, nil
+}
+
+// GetBlockCountMetricsResponse response for get_block_count_metrics rpc call
+type GetBlockCountMetricsResponse struct {
+	Success bool                     `json:"success"`
+	Metrics *types.BlockCountMetrics `json:"metrics"`
+}
+
+// GetBlockCountMetrics gets metrics about blocks
+func (s *FullNodeService) GetBlockCountMetrics() (*GetBlockCountMetricsResponse, *http.Response, error) {
+	request, err := s.NewRequest("get_block_count_metrics", nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	r := &GetBlockCountMetricsResponse{}
+
 	resp, err := s.Do(request, r)
 	if err != nil {
 		return nil, resp, err
