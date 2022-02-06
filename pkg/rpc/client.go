@@ -1,7 +1,7 @@
 package rpc
 
 import (
-	"github.com/cmmarslender/go-chia-rpc/pkg/config"
+	"github.com/cmmarslender/go-chia-lib/pkg/config"
 	"github.com/cmmarslender/go-chia-rpc/pkg/httpclient"
 	"github.com/cmmarslender/go-chia-rpc/pkg/rpcinterface"
 	"github.com/cmmarslender/go-chia-rpc/pkg/types"

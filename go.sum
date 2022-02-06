@@ -1,3 +1,5 @@
+github.com/cmmarslender/go-chia-lib v0.0.0-20220206192740-0fe6f069373e h1:jPR7ooxv6yOj2W9kVPLOfEU1qYE/LVhgXuEe8ip7L+g=
+github.com/cmmarslender/go-chia-lib v0.0.0-20220206192740-0fe6f069373e/go.mod h1:QN1oRMz3cCe1rzllzeL3lARPL45YaR2X1ijBFOm/XoE=
 github.com/google/go-cmp v0.5.2 h1:X2ev0eStA3AbceY54o37/0PQ/UWqKEiiO2dKL5OPaFM=
 github.com/google/go-cmp v0.5.2/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/gNBxE=
 github.com/google/go-querystring v1.1.0 h1:AnCroh3fv4ZBgVIf1Iwtovgjaw/GiKJo8M8yD/fhyJ8=
