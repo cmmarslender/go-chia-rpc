@@ -7,13 +7,11 @@ import (
 	"github.com/cmmarslender/go-chia-rpc/pkg/types"
 	"github.com/cmmarslender/go-chia-rpc/pkg/websocketclient"
 	"net/http"
-	"net/url"
 )
 
 // Client is the RPC client
 type Client struct {
 	config  *config.ChiaConfig
-	baseURL *url.URL
 
 	activeClient rpcinterface.Client
 
