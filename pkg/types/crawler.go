@@ -4,7 +4,7 @@ package types
 type CrawlerPeerCounts struct {
 	TotalLast5Days uint           `json:"total_last_5_days"`
 	ReliableNodes  uint           `json:"reliable_nodes"`
-	IPV4Last5Days  uint           `json:"ipv_4_last_5_days"`
-	IPV6Last5Days  uint           `json:"ipv_6_last_5_days"`
+	IPV4Last5Days  uint           `json:"ipv4_last_5_days"`
+	IPV6Last5Days  uint           `json:"ipv6_last_5_days"`
 	Versions       map[string]int `json:"versions"`
 }
