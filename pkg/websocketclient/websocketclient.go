@@ -4,6 +4,7 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"net/url"
 	"time"
@@ -29,6 +30,9 @@ type WebsocketClient struct {
 	conn *websocket.Conn
 
 	listenSyncActive bool
+
+	// subscriptions Keeps track of subscribed topics, so we can re-subscribe if we lose a connection and reconnect
+	subscriptions []string
 }
 
 // NewWebsocketClient returns a new websocket client that satisfies the rpcinterface.Client interface
@@ -144,6 +148,12 @@ func (c *WebsocketClient) SubscribeSelf() error {
 
 // Subscribe adds a subscription to a particular service
 func (c *WebsocketClient) Subscribe(service string) error {
+	c.subscriptions = append(c.subscriptions, service)
+
+	return c.doSubscribe(service)
+}
+
+func (c *WebsocketClient) doSubscribe(service string) error {
 	request, err := c.NewRequest(rpcinterface.ServiceDaemon, "register_service", types.WebsocketSubscription{Service: service})
 	if err != nil {
 		return err
@@ -162,8 +172,17 @@ func (c *WebsocketClient) ListenSync(handler rpcinterface.WebsocketResponseHandl
 		c.listenSyncActive = true
 
 		for {
-			// @TODO need to catch panics here if daemon disconnects or something
 			_, message, err := c.conn.ReadMessage()
+			if err != nil {
+				if closeErr, isCloseErr := err.(*websocket.CloseError); isCloseErr {
+					log.Println(closeErr.Error())
+					c.conn = nil
+					c.reconnectLoop()
+					continue
+				}
+				c.listenSyncActive = false
+				return err
+			}
 			resp := &types.WebsocketResponse{}
 			err = json.Unmarshal(message, resp)
 			handler(resp, err)
@@ -171,6 +190,23 @@ func (c *WebsocketClient) ListenSync(handler rpcinterface.WebsocketResponseHandl
 	}
 
 	return nil
+}
+
+func (c *WebsocketClient) reconnectLoop() {
+	for {
+		log.Println("Trying to reconnect...")
+		err := c.ensureConnection()
+		if err == nil {
+			log.Println("Reconnected!")
+			for _, topic := range c.subscriptions {
+				c.doSubscribe(topic)
+			}
+			return
+		}
+
+		log.Printf("Unable to reconnect: %s\n", err.Error())
+		time.Sleep(5 * time.Second)
+	}
 }
 
 // Sets the initial key pairs based on config
