@@ -1,6 +1,7 @@
 package types
 
 // WalletType types of wallets
+// This matches constants on the chia-blockchain end as well. Don't change to arbitrary values.
 type WalletType uint8
 
 const (

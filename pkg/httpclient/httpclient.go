@@ -5,13 +5,15 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
-	"github.com/cmmarslender/go-chia-lib/pkg/config"
-	"github.com/cmmarslender/go-chia-rpc/pkg/rpcinterface"
-	"github.com/google/go-querystring/query"
 	"io"
 	"net/http"
 	"net/url"
 	"time"
+
+	"github.com/cmmarslender/go-chia-lib/pkg/config"
+	"github.com/google/go-querystring/query"
+
+	"github.com/cmmarslender/go-chia-rpc/pkg/rpcinterface"
 )
 
 // HTTPClient connects to Chia RPC via standard HTTP requests
@@ -37,6 +39,10 @@ type HTTPClient struct {
 	walletPort    uint16
 	walletKeyPair *tls.Certificate
 	walletClient  *http.Client
+
+	crawlerPort    uint16
+	crawlerKeyPair *tls.Certificate
+	crawlerClient  *http.Client
 }
 
 // NewHTTPClient returns a new HTTP client that satisfies the rpcinterface.Client interface
@@ -48,6 +54,7 @@ func NewHTTPClient(cfg *config.ChiaConfig, options ...rpcinterface.ClientOptionF
 		farmerPort:    cfg.Farmer.RPCPort,
 		harvesterPort: cfg.Harvester.RPCPort,
 		walletPort:    cfg.Wallet.RPCPort,
+		crawlerPort:   cfg.Seeder.CrawlerConfig.RPCPort,
 	}
 
 	// Sets the default host. Can be overridden by client options
@@ -197,6 +204,11 @@ func (c *HTTPClient) initialKeyPairs() error {
 		return err
 	}
 
+	c.crawlerKeyPair, err = c.config.Seeder.CrawlerConfig.SSL.LoadPrivateKeyPair()
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -231,6 +243,13 @@ func (c *HTTPClient) generateHTTPClients() error {
 		}
 	}
 
+	if c.crawlerClient == nil {
+		c.crawlerClient, err = c.generateHTTPClientForService(rpcinterface.ServiceCrawler)
+		if err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -246,6 +265,8 @@ func (c *HTTPClient) generateHTTPClientForService(service rpcinterface.ServiceTy
 		keyPair = c.harvesterKeyPair
 	case rpcinterface.ServiceWallet:
 		keyPair = c.walletKeyPair
+	case rpcinterface.ServiceCrawler:
+		keyPair = c.crawlerKeyPair
 	default:
 		return nil, fmt.Errorf("unknown service")
 	}
@@ -284,6 +305,8 @@ func (c *HTTPClient) portForService(service rpcinterface.ServiceType) uint16 {
 		port = c.harvesterPort
 	case rpcinterface.ServiceWallet:
 		port = c.walletPort
+	case rpcinterface.ServiceCrawler:
+		port = c.crawlerPort
 	}
 
 	return port
@@ -302,6 +325,8 @@ func (c *HTTPClient) httpClientForService(service rpcinterface.ServiceType) (*ht
 		client = c.harvesterClient
 	case rpcinterface.ServiceWallet:
 		client = c.walletClient
+	case rpcinterface.ServiceCrawler:
+		client = c.crawlerClient
 	}
 
 	if client == nil {

@@ -79,6 +79,7 @@ type BlockCountMetrics struct {
 // ReceiveBlockResult When Blockchain.receive_block(b) is called, one of these results is returned,
 // showing whether the block was added to the chain (extending the peak),
 // and if not, why it was not added.
+// These values match values in chia blockchain. Must not be arbitrarily changed
 type ReceiveBlockResult uint8
 
 const (

@@ -4,13 +4,15 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
-	"github.com/cmmarslender/go-chia-lib/pkg/config"
-	"github.com/cmmarslender/go-chia-rpc/pkg/rpcinterface"
-	"github.com/cmmarslender/go-chia-rpc/pkg/types"
-	"github.com/gorilla/websocket"
 	"net/http"
 	"net/url"
 	"time"
+
+	"github.com/cmmarslender/go-chia-lib/pkg/config"
+	"github.com/gorilla/websocket"
+
+	"github.com/cmmarslender/go-chia-rpc/pkg/rpcinterface"
+	"github.com/cmmarslender/go-chia-rpc/pkg/types"
 )
 
 const origin string = "go-chia-rpc"
@@ -39,7 +41,7 @@ func NewWebsocketClient(cfg *config.ChiaConfig, options ...rpcinterface.ClientOp
 
 	// Sets the default host. Can be overridden by client options
 	err := c.SetBaseURL(&url.URL{
-		Scheme: "https",
+		Scheme: "wss",
 		Host:   "localhost",
 	})
 	if err != nil {
@@ -113,6 +115,8 @@ func (c *WebsocketClient) Do(req *rpcinterface.Request, v interface{}) (*http.Re
 		destination = "chia_harvester" // @TODO validate the correct string for this
 	case rpcinterface.ServiceWallet:
 		destination = "chia_wallet"
+	case rpcinterface.ServiceCrawler:
+		destination = "chia_crawler"
 	default:
 		return nil, fmt.Errorf("unknown service")
 	}
@@ -158,6 +162,7 @@ func (c *WebsocketClient) ListenSync(handler rpcinterface.WebsocketResponseHandl
 		c.listenSyncActive = true
 
 		for {
+			// @TODO need to catch panics here if daemon disconnects or something
 			_, message, err := c.conn.ReadMessage()
 			resp := &types.WebsocketResponse{}
 			err = json.Unmarshal(message, resp)

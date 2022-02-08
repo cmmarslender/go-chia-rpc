@@ -1,12 +1,14 @@
 package rpc
 
 import (
+	"net/http"
+
 	"github.com/cmmarslender/go-chia-lib/pkg/config"
+
 	"github.com/cmmarslender/go-chia-rpc/pkg/httpclient"
 	"github.com/cmmarslender/go-chia-rpc/pkg/rpcinterface"
 	"github.com/cmmarslender/go-chia-rpc/pkg/types"
 	"github.com/cmmarslender/go-chia-rpc/pkg/websocketclient"
-	"net/http"
 )
 
 // Client is the RPC client
@@ -18,6 +20,7 @@ type Client struct {
 	// Services for the different chia services
 	FullNodeService *FullNodeService
 	WalletService   *WalletService
+	CrawlerService  *CrawlerService
 
 	websocketHandlers []rpcinterface.WebsocketResponseHandler
 }
@@ -27,10 +30,10 @@ type ConnectionMode uint8
 
 const (
 	// ConnectionModeHTTP uses HTTP for requests to the RPC server
-	ConnectionModeHTTP ConnectionMode = 1
+	ConnectionModeHTTP ConnectionMode = iota
 
 	// ConnectionModeWebsocket uses websockets for requests to the RPC server
-	ConnectionModeWebsocket ConnectionMode = 2
+	ConnectionModeWebsocket
 )
 
 // NewClient returns a new RPC Client
@@ -59,6 +62,7 @@ func NewClient(connectionMode ConnectionMode, options ...rpcinterface.ClientOpti
 	// Init Services
 	c.FullNodeService = &FullNodeService{client: c}
 	c.WalletService = &WalletService{client: c}
+	c.CrawlerService = &CrawlerService{client: c}
 
 	return c, nil
 }
