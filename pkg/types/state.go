@@ -12,6 +12,7 @@ type BlockchainState struct {
 	MempoolSize                 uint64          `json:"mempool_size"`
 	MempoolCost                 uint64          `json:"mempool_cost"`
 	MempoolMinFees              *MempoolMinFees `json:"mempool_min_fees"`
+	MempoolMaxTotalCost         uint64          `json:"mempool_max_total_cost"`
 	Peak                        *BlockRecord    `json:"peak"`
 	Space                       Uint128         `json:"space"`
 	SubSlotIters                uint64          `json:"sub_slot_iters"`
