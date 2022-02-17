@@ -29,12 +29,14 @@ const (
 	TimelordChainBluebox TimelordChain = 4
 )
 
-// FinishedPoTChallengeEvent data every time a PoT Challenge is completed
-type FinishedPoTChallengeEvent struct {
+// FinishedPoTEvent data every time a PoT Challenge is completed
+type FinishedPoTEvent struct {
 	Success          bool          `json:"success"`
 	Chain            TimelordChain `json:"chain"`
 	EstimatedIPS     float64       `json:"estimated_ips"`
 	IterationsNeeded uint64        `json:"iterations_needed"`
+	VDFInfo          VDFInfo       `json:"vdf_info"`
+	VDFProof         VDFProof      `json:"vdf_proof"`
 }
 
 // CompressibleVDFField Stores, for a given VDF, the field that uses it.
