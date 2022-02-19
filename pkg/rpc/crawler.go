@@ -46,9 +46,9 @@ func (s *CrawlerService) GetPeerCounts() (*GetPeerCountsResponse, *http.Response
 
 // GetIPsAfterTimestampOptions Options for the get_ips_after_timestamp RPC call
 type GetIPsAfterTimestampOptions struct {
-	After  int `json:"after"`
-	Offset int `json:"offset"`
-	Limit  int `json:"limit"`
+	After  int64 `json:"after"`
+	Offset uint  `json:"offset"`
+	Limit  uint  `json:"limit"`
 }
 
 // GetIPsAfterTimestampResponse Response for get_ips_after_timestamp
