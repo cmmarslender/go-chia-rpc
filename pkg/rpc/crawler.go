@@ -60,7 +60,7 @@ type GetIPsAfterTimestampResponse struct {
 
 // GetIPsAfterTimestamp Returns IP addresses seen by the network after a particular timestamp
 func (s *CrawlerService) GetIPsAfterTimestamp(opts *GetIPsAfterTimestampOptions) (*GetIPsAfterTimestampResponse, *http.Response, error) {
-	request, err := s.NewRequest("get_ips_after_timestamp", nil)
+	request, err := s.NewRequest("get_ips_after_timestamp", opts)
 	if err != nil {
 		return nil, nil, err
 	}
