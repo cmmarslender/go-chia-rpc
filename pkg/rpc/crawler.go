@@ -43,3 +43,33 @@ func (s *CrawlerService) GetPeerCounts() (*GetPeerCountsResponse, *http.Response
 
 	return r, resp, nil
 }
+
+// GetIPsAfterTimestampOptions Options for the get_ips_after_timestamp RPC call
+type GetIPsAfterTimestampOptions struct {
+	After  int `json:"after"`
+	Offset int `json:"offset"`
+	Limit  int `json:"limit"`
+}
+
+// GetIPsAfterTimestampResponse Response for get_ips_after_timestamp
+type GetIPsAfterTimestampResponse struct {
+	Success bool     `json:"success"`
+	IPs     []string `json:"ips"`
+	Total   int      `json:"total"`
+}
+
+// GetIPsAfterTimestamp Returns IP addresses seen by the network after a particular timestamp
+func (s *CrawlerService) GetIPsAfterTimestamp(opts *GetIPsAfterTimestampOptions) (*GetIPsAfterTimestampResponse, *http.Response, error) {
+	request, err := s.NewRequest("get_ips_after_timestamp", nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	r := &GetIPsAfterTimestampResponse{}
+	resp, err := s.Do(request, r)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return r, resp, nil
+}
